@@ -1,0 +1,11 @@
+22:07:26 **** Incremental Build of configuration Debug for project es770 ****
+make all 
+'Invoking: Cross ARM GNU Print Size'
+arm-none-eabi-size --format=berkeley "es770.elf"
+   text	   data	    bss	    dec	    hex	filename
+  13184	    132	   2132	  15448	   3c58	es770.elf
+'Finished building: es770.siz'
+' '
+
+22:07:26 Build Finished (took 676ms)
+

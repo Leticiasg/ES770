@@ -1,0 +1,695 @@
+/* *********************************************************************** */
+/* File name:        serial_hal.h                                          */
+/* File description: This file contains functions for                      */
+/*                   interpret and return serial protocols                 */
+/* Author name:      fcpinheiro,lopfrigerio                                */
+/* Creation date:    19apr2018                                             */
+/* Revision date:    28jun2018                                             */
+/* *********************************************************************** */
+
+#include "cmdmachine_hal.h"
+#include "../Serial/serial_hal.h"
+#include "../UserInterface/uiFunctions.h"
+
+/* interpreted message position defines */
+#define RETRMSG_POS 0 /* ACK (=='a'), ERR (=='e'), NONE_MSG (==0) */
+#define ACTTYPE_POS 1 /* doLed (=='L'), doSwitch (=='S'), doBuzzer(=='B'), doFan(=='F'),doHeater(=='H'),doKp(=="P"),doKi(=="I"),doKd(=="D"),doFanSpeed(=='V') */
+#define SWISTAT_POS 2 /* switch -> selected switch status */
+#define LEDFTST_POS 2 /* LED    -> clrLed (==0), setLed (==1) */
+#define LEDSELN_POS 3 /* doLed -> selected LED (== 1:4) */
+#define BUZZMSD_POS 2 /* buzzer -> most significant digit of buzzer action time (in miliseconds) */
+#define BUZZMID_POS 3 /* buzzer -> second most significant digit of buzzer action time (in miliseconds) */
+#define BUZZLSD_POS 4 /* buzzer -> least significant digit of buzzer action time (in miliseconds) */
+#define CFANMSD_POS 2 /* fan -> most significant digit of fan duty cycle (in percentage) */
+#define CFANMID_POS 3 /* fan -> second most significant digit of fan duty cycle (in percentage) */
+#define CFANLSD_POS 4 /* fan -> least significant digit of fan duty cycle (in percentage) */
+#define HEATMSD_POS 2 /* heater -> most significant digit of heater duty cycle (in percentage) */
+#define HEATMID_POS 3 /* heater -> second most significant digit of heater duty cycle (in percentage) */
+#define HEATLSD_POS 4 /* heater -> least significant digit of heater duty cycle (in percentage) */
+#define CNSTMSD_POS 2 /* controller constant -> most significant digit of controller constant */
+#define CNSTLSD_POS 3 /* controller constant -> least significant digit of controller constant */
+#define CNSTAFD_POS 4 /* controller constant -> digit after dot */
+#define FSPDMSD_POS 2 /* fan speed -> most significant digit of speed (in RPS) */
+#define FSPDLSD_POS 3 /* fan speed -> least significant digit of speed (in RPS) */
+
+/* machine state states as defined in model */
+typedef enum
+{
+	IDLE,
+	L,
+	LC,
+	LS,
+	S,
+	B,
+	BD,
+	BDD,
+	F,
+	FD,
+	FDD,
+	H,
+	HD,
+	HDD,
+	K,
+	KP,
+	KI,
+	KD,
+	KPD,
+	KID,
+	KDD,
+	KPDD,
+	KIDD,
+	KDDD,
+	KPDDP,
+	KIDDP,
+	KDDDP,
+	V,
+	VD
+} cmdmachine_interpret_state_type_e;
+
+/* ********************************************************************************************************* */
+/* Method name:        cmdmachine_interpretCmd                                                               */
+/* Method description: Interpret command from host for return                                                */
+/*                     and execute actions                                                                   */
+/* Input params:       cCmd = command char read from buffer                                                  */
+/*                     cvInterpMsg =                                                                         */
+/*              position 0: ACK (=='a'), ERR (=='e'), NONE_MSG (==0)                                         */
+/*              position 1: doLed (=='L'), doSwitch (=='S'), doBuzzer(=='B'), doFan(=='F'), doHeater(=='H'), */
+/* 								doKp(=="P"),doKi(=="I"),doKd(=="D"),doFanSpeed(=='V')                        */
+/*              position 2: * switch -> selected switch status                                               */
+/*                          * LED    -> clrLed (==0), setLed (==1)                                           */
+/*                          * buzzer -> most significant digit of buzzer action time (in miliseconds)        */
+/*                          * fan -> most significant digit of fan duty cycle (in percentage)                */
+/*                          * heater -> most significant digit of heater duty cycle (in percentage)          */
+/*                          * controller constant -> most significant digit of controller constant           */
+/*                          * fan speed -> most significant digit of speed (in RPS)                          */
+/*              position 3: * buzzer -> second most significant digit of buzzer action time (in miliseconds) */
+/*                          * doLed -> selected LED (== 1:4)                                                 */
+/*                          * fan -> second most significant digit of fan duty cycle (in percentage)         */
+/*                          * heater -> second most significant digit of heater duty cycle (in percentage)   */
+/*                          * controller constant -> least significant digit of controller constant          */
+/*                          * fan speed -> least significant digit of speed (in RPS)                         */
+/*              position 4: * buzzer -> least significant digit of buzzer action time (in miliseconds)       */
+/*                          * fan -> least significant digit of fan duty cycle (in percentage)               */
+/*                          * heater -> least significant digit of heater duty cycle (in percentage)         */
+/*                          * controller constant -> digit after dot                                         */
+/* Output params: n/a                                                                                        */
+/* ********************************************************************************************************* */
+void cmdmachine_interpretCmd(char cCmd, char* cvInterpMsg)
+{
+	static cmdmachine_interpret_state_type_e cstCmdState = IDLE;
+	switch_status_type_e sstpSwiStatus = SWITCH_OFF;
+	char cSwiNum = 0;
+
+	switch(cstCmdState)
+	{
+		case IDLE:
+			if('L' == cCmd)
+			{
+				cstCmdState = L;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+			}
+			else if('S' == cCmd)
+			{
+				cstCmdState = S;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+			}
+			else if('B' == cCmd)
+			{
+				cstCmdState = B;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+			}
+			else if('F' == cCmd)
+			{
+				cstCmdState = F;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+			}
+			else if('H' == cCmd)
+			{
+				cstCmdState = H;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+			}
+			else if('K' == cCmd)
+			{
+				cstCmdState = K;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+			}
+			else if('V' == cCmd)
+			{
+				cstCmdState = V;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case L:
+			if('C' == cCmd)
+			{
+				cstCmdState = LC;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+			}
+			else if('S' == cCmd)
+			{
+				cstCmdState = LS;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case LS:
+			if('1' == cCmd || '2' == cCmd || '3' == cCmd || '4' == cCmd)
+			{
+				cstCmdState = IDLE;
+				cvInterpMsg[RETRMSG_POS] = 'a';
+				cvInterpMsg[ACTTYPE_POS] = 'L';
+				cvInterpMsg[LEDFTST_POS] = SET_LED;
+				cvInterpMsg[LEDSELN_POS] = cCmd - '0';
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case LC:
+			if('1' == cCmd || '2' == cCmd || '3' == cCmd || '4' == cCmd)
+			{
+				cstCmdState = IDLE;
+				cvInterpMsg[RETRMSG_POS] = 'a';
+				cvInterpMsg[ACTTYPE_POS] = 'L';
+				cvInterpMsg[LEDFTST_POS] = CLEAR_LED;
+				cvInterpMsg[LEDSELN_POS] = cCmd - '0';
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case S:
+			if('1' == cCmd || '2' == cCmd || '3' == cCmd || '4' == cCmd)
+			{
+				cstCmdState = IDLE;
+				cSwiNum = cCmd - '0';
+
+				cvInterpMsg[RETRMSG_POS] = 'a';
+				cvInterpMsg[ACTTYPE_POS] = 'S';
+
+				ledswi_initLedSwitch(0,4);
+
+				sstpSwiStatus = ledswi_getSwitchStatus(cSwiNum);
+				if(SWITCH_OFF == sstpSwiStatus)
+				{
+					cvInterpMsg[SWISTAT_POS] = 'O';
+				}
+				else
+				{
+					cvInterpMsg[SWISTAT_POS] = 'C';
+				}
+
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case B:
+			if(('0' <= cCmd) && ('9' >= cCmd))
+			{
+				cstCmdState = BD;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+				cvInterpMsg[BUZZMSD_POS] = cCmd - '0';
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case BD:
+			if(('0' <= cCmd) && ('9' >= cCmd))
+			{
+				cstCmdState = BDD;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+				cvInterpMsg[BUZZMID_POS] = cCmd - '0';
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case BDD:
+			if(('0' <= cCmd) && ('9' >= cCmd))
+			{
+				cstCmdState = IDLE;
+				cvInterpMsg[RETRMSG_POS] = 'a';
+				cvInterpMsg[ACTTYPE_POS] = 'B';
+				cvInterpMsg[BUZZLSD_POS] = cCmd - '0';
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case F:
+			if(('0' <= cCmd) && ('9' >= cCmd))
+			{
+				cstCmdState = FD;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+				cvInterpMsg[CFANMSD_POS] = cCmd - '0';
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case FD:
+			if(('0' <= cCmd) && ('9' >= cCmd))
+			{
+				cstCmdState = FDD;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+				cvInterpMsg[CFANMID_POS] = cCmd - '0';
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case FDD:
+			if(('0' == cCmd) || ('1' == cCmd))
+			{
+				cstCmdState = IDLE;
+				cvInterpMsg[RETRMSG_POS] = 'a';
+				cvInterpMsg[ACTTYPE_POS] = 'F';
+				cvInterpMsg[CFANLSD_POS] = cCmd - '0';
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case H:
+			if(('0' <= cCmd) && ('9' >= cCmd))
+			{
+				cstCmdState = HD;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+				cvInterpMsg[HEATMSD_POS] = cCmd - '0';
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case HD:
+			if(('0' <= cCmd) && ('9' >= cCmd))
+			{
+				cstCmdState = HDD;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+				cvInterpMsg[HEATMID_POS] = cCmd - '0';
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case HDD:
+			if(('0' <= cCmd) && ('9' >= cCmd))
+			{
+				cstCmdState = IDLE;
+				cvInterpMsg[RETRMSG_POS] = 'a';
+				cvInterpMsg[ACTTYPE_POS] = 'H';
+				cvInterpMsg[HEATLSD_POS] = cCmd - '0';
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case K:
+			if('P' == cCmd)
+			{
+				cstCmdState = KP;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+			}
+			else if('I' == cCmd)
+			{
+				cstCmdState = KI;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+			}
+			else if('D' == cCmd)
+			{
+				cstCmdState = KD;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case KP:
+			if(('0' <= cCmd) && ('9' >= cCmd))
+			{
+				cstCmdState = KPD;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+				cvInterpMsg[CNSTMSD_POS] = cCmd - '0';
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case KI:
+			if(('0' <= cCmd) && ('9' >= cCmd))
+			{
+				cstCmdState = KID;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+				cvInterpMsg[CNSTMSD_POS] = cCmd - '0';
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case KD:
+			if(('0' <= cCmd) && ('9' >= cCmd))
+			{
+				cstCmdState = KDD;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+				cvInterpMsg[CNSTMSD_POS] = cCmd - '0';
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case KPD:
+			if(('0' <= cCmd) && ('9' >= cCmd))
+			{
+				cstCmdState = KPDD;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+				cvInterpMsg[CNSTLSD_POS] = cCmd - '0';
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case KID:
+			if(('0' <= cCmd) && ('9' >= cCmd))
+			{
+				cstCmdState = KIDD;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+				cvInterpMsg[CNSTLSD_POS] = cCmd - '0';
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case KDD:
+			if(('0' <= cCmd) && ('9' >= cCmd))
+			{
+				cstCmdState = KDDD;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+				cvInterpMsg[CNSTLSD_POS] = cCmd - '0';
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case KPDD:
+			if('.' == cCmd)
+			{
+				cstCmdState = KPDDP;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case KIDD:
+			if('.' == cCmd)
+			{
+				cstCmdState = KIDDP;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case KDDD:
+			if('.' == cCmd)
+			{
+				cstCmdState = KDDDP;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case KPDDP:
+			if(('0' <= cCmd) && ('9' >= cCmd))
+			{
+				cstCmdState = IDLE;
+				cvInterpMsg[RETRMSG_POS] = 'a';
+				cvInterpMsg[ACTTYPE_POS] = 'P';
+				cvInterpMsg[CNSTAFD_POS] = cCmd - '0';
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case KIDDP:
+			if(('0' <= cCmd) && ('9' >= cCmd))
+			{
+				cstCmdState = IDLE;
+				cvInterpMsg[RETRMSG_POS] = 'a';
+				cvInterpMsg[ACTTYPE_POS] = 'I';
+				cvInterpMsg[CNSTAFD_POS] = cCmd - '0';
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case KDDDP:
+			if(('0' <= cCmd) && ('9' >= cCmd))
+			{
+				cstCmdState = IDLE;
+				cvInterpMsg[RETRMSG_POS] = 'a';
+				cvInterpMsg[ACTTYPE_POS] = 'D';
+				cvInterpMsg[CNSTAFD_POS] = cCmd - '0';
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case V:
+			if(('0' <= cCmd) && ('9' >= cCmd))
+			{
+				cstCmdState = VD;
+				cvInterpMsg[RETRMSG_POS] = NONE_MSG;
+				cvInterpMsg[FSPDMSD_POS] = cCmd - '0';
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+
+		case VD:
+			if(('0' <= cCmd) && ('9' >= cCmd))
+			{
+				cstCmdState = IDLE;
+				cvInterpMsg[RETRMSG_POS] = 'a';
+				cvInterpMsg[ACTTYPE_POS] = 'V';
+				cvInterpMsg[FSPDLSD_POS] = cCmd - '0';
+			}
+			else
+			{
+				cvInterpMsg[RETRMSG_POS] = 'e';
+				cstCmdState = IDLE;
+			}
+		break;
+	}
+
+}
+
+/* ********************************************************************************************************* */
+/* Method name:        cmdmachine_retCmdReponse                                                              */
+/* Method description: Return ACK and ERR messages to host and switch status for suitable case as well as    */
+/*                     trigger actions commanded by host                                                     */
+/* Input params:       cvRespMsg =                                                                           */
+/*              position 0: ACK (=='a'), ERR (=='e'), NONE_MSG (==0)                                         */
+/*              position 1: doLed (=='L'), doSwitch (=='S'), doBuzzer(=='B'), doFan(=='F'), doHeater(=='H'), */
+/* 								doKp(=="P"),doKi(=="I"),doKd(=="D"),doFanSpeed(=='V')                        */
+/*              position 2: * switch -> selected switch status                                               */
+/*                          * LED    -> clrLed (==0), setLed (==1)                                           */
+/*                          * buzzer -> most significant digit of buzzer action time (in miliseconds)        */
+/*                          * fan -> most significant digit of fan duty cycle (in percentage)                */
+/*                          * heater -> most significant digit of heater duty cycle (in percentage)          */
+/*                          * controller constant -> most significant digit of controller constant           */
+/*                          * fan speed -> most significant digit of speed (in RPS)                          */
+/*              position 3: * buzzer -> second most significant digit of buzzer action time (in miliseconds) */
+/*                          * doLed -> selected LED (== 1:4)                                                 */
+/*                          * fan -> second most significant digit of fan duty cycle (in percentage)         */
+/*                          * heater -> second most significant digit of heater duty cycle (in percentage)   */
+/*                          * controller constant -> least significant digit of controller constant          */
+/*                          * fan speed -> least significant digit of speed (in RPS)                         */
+/*              position 4: * buzzer -> least significant digit of buzzer action time (in miliseconds)       */
+/*                          * fan -> least significant digit of fan duty cycle (in percentage)               */
+/*                          * heater -> least significant digit of heater duty cycle (in percentage)         */
+/*                          * controller constant -> digit after dot                                         */
+/*                     lstpLedSt      = pointer to vector containing current LED status                      */
+/*                     ipBuzTime      = pointer to variable containing buzzer action time                    */
+/*                     ipFanDcycle    = pointer to variable containing cooler fan duty cycle                 */
+/*                     ipHeaterDcycle = pointer to variable containing heater duty cycle                     */
+/*                     ipFanSpeed     = pointer to variable containing fan reference speed                   */
+/* Output params: n/a                                                                                        */
+/* ********************************************************************************************************* */
+void cmdmachine_retCmdReponse(char* cvRespMsg, led_status_type_e* lstpLedSt, int* ipBuzTime, int* ipFanDcycle, int* ipHeaterDcycle, int* ipFanSpeed, PID_DATA* pdtPidData)
+{
+	char cvMsg[4];
+	char cMsgLength = 3;
+	int i;
+	int iNewBuzTime;
+	int iNewFanDcycle;
+	int iNewHeaterDcycle;
+
+	switch(cvRespMsg[RETRMSG_POS])
+	{
+		case 'a':
+			cvMsg[0] = 'A';
+			cvMsg[1] = 'C';
+			cvMsg[2] = 'K';
+
+			/* trigger actions according to command */
+
+			if('S' == cvRespMsg[ACTTYPE_POS])
+			{
+				cvMsg[3] = cvRespMsg[SWISTAT_POS];
+				cMsgLength = 4;
+			}
+			else if('L' == cvRespMsg[ACTTYPE_POS])
+			{
+				lstpLedSt[cvRespMsg[LEDSELN_POS]] = cvRespMsg[LEDFTST_POS];
+			}
+			else if('B' == cvRespMsg[ACTTYPE_POS])
+			{
+				iNewBuzTime = 100*cvRespMsg[BUZZMSD_POS] + 10*cvRespMsg[BUZZMID_POS] + cvRespMsg[BUZZLSD_POS];
+				*ipBuzTime = iNewBuzTime;
+			}
+			else if('F' == cvRespMsg[ACTTYPE_POS])
+			{
+				iNewFanDcycle = 100*cvRespMsg[CFANMSD_POS] + 10*cvRespMsg[CFANMID_POS] + cvRespMsg[CFANLSD_POS];
+				*ipFanDcycle = iNewFanDcycle;
+			}
+			else if('H' == cvRespMsg[ACTTYPE_POS])
+			{
+				iNewHeaterDcycle = 100*cvRespMsg[HEATMSD_POS] + 10*cvRespMsg[HEATMID_POS] + cvRespMsg[HEATLSD_POS];
+				*ipHeaterDcycle = iNewHeaterDcycle;
+			}
+			else if('P' == cvRespMsg[ACTTYPE_POS])
+			{
+				pdtPidData->dKp = (double)(10*cvRespMsg[CNSTMSD_POS]) + (double)cvRespMsg[CNSTLSD_POS] + 0.1*cvRespMsg[CNSTAFD_POS];
+			}
+			else if('I' == cvRespMsg[ACTTYPE_POS])
+			{
+				pdtPidData->dKi = (double)(10*cvRespMsg[CNSTMSD_POS]) + (double)cvRespMsg[CNSTLSD_POS] + 0.1*cvRespMsg[CNSTAFD_POS];
+			}
+			else if('D' == cvRespMsg[ACTTYPE_POS])
+			{
+				pdtPidData->dKd = (double)(10*cvRespMsg[CNSTMSD_POS]) + (double)cvRespMsg[CNSTLSD_POS] + 0.1*cvRespMsg[CNSTAFD_POS];
+			}
+			else if('V' == cvRespMsg[ACTTYPE_POS])
+			{
+				*ipFanSpeed = 10*cvRespMsg[FSPDMSD_POS] + cvRespMsg[FSPDLSD_POS];
+			}
+
+			/* clear interpreted message vector */
+			for(i = 0; i < 5; i++)
+			{
+				cvRespMsg[i] = 0;
+			}
+
+			break;
+
+		case 'e':
+			cvMsg[0] = 'E';
+			cvMsg[1] = 'R';
+			cvMsg[2] = 'R';
+			break;
+
+		default:
+			break;
+	} /* switch(cvRespMsg[RETRMSG_POS]) */
+
+	/* send message to host */
+	for(i = 0; i < cMsgLength; i++)
+	{
+		serial_sendBuffer(cvMsg[i]);
+	}
+}
+
+

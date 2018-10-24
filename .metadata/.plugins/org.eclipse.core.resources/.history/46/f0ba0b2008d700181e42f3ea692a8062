@@ -1,0 +1,160 @@
+/* ***************************************************************** */
+/* File name:        uiFunctions.c                                   */
+/* File description: C code file containing the functions/methods    */
+/*                   interfaces for implementing desired             */
+/*                   hardware-user interface tasks                   */
+/* Author name:      fpinheiro,lfrigerio                             */
+/* Creation date:    05abr2018                                       */
+/* Revision date:    20jun2018                                       */
+/* ***************************************************************** */
+#include "fsl_device_registers.h"
+#include "../Buzzer/buzzer_hal.h"
+#include "../Display7seg/display7seg_hal.h"
+#include "uiFunctions.h"
+#include "../Util/util.h"
+#include "../mcg_hal.h"
+#include "../KL25Z/es670_peripheral_board.h"
+#include "../Lcd/lcd_hal.h"
+#include "../Util/timer_counter.h"
+#include "../Serial/serial_hal.h"
+#include "../Util/adc.h"
+
+#define COMPUTE_TEMP_TIME 500 /* time to send temperature via serial in miliseconds */
+
+
+/* ********************************************************************************************************* */
+/* Method name:        uiFunctions_convertNum2Str                                                            */
+/* Method description: convert integer variable (< 10^5) to printable string                                 */
+/* Input params:                                                                                             */
+/*               iNum  = integer to be converted                                                             */
+/*               cpStr = pointer to string to be written                                                     */
+/* Output params:      n/a                                                                                   */
+/* ********************************************************************************************************* */
+void uiFunctions_convertNum2Str(int iNum, char* cpStr)
+{
+	char cPos = 0; /* counting variable */
+	char cDigit;
+
+	/* convert to string */
+	if(iNum)
+	{
+		while(iNum > 0)
+		{
+			cDigit = '0' + iNum % 10;
+			cpStr[5-1 - cPos] = cDigit;
+			iNum /= 10;
+			cPos++;
+		}
+	}
+	else
+	{
+		cpStr[4] = '0';
+	}
+
+}
+
+/* ********************************************************************************************************* */
+/* Method name:        uiFunctions_setCoolerSpeedBySwi                                                       */
+/* Method description: set cooler fan duty cycle by switch, alternating between 0%, 25%, 50%, 75% and 100%,  */
+/*                     respectively                                                                          */
+/* Input params:       n/a                                                                                   */
+/* Output params:      n/a                                                                                   */
+/* ********************************************************************************************************* */
+int uiFunctions_setCoolerSpeedBySwi()
+{
+	static char cState = 0;
+	static char cDuty = 0;
+
+	/* sets all 4 pins as switches */
+	ledswi_initLedSwitch(0,4);
+
+
+	if(SWITCH_ON == ledswi_getSwitchStatus(3))
+	{
+		cState++;
+		if(5 == cState)
+		{
+			cState = 0;
+		}
+
+		switch(cState)
+		{
+			case 0:
+				cDuty = 0;
+				timer_setFanDutyCycle(cDuty);
+				break;
+
+			case 1:
+				cDuty = 25;
+				timer_setFanDutyCycle(cDuty);
+				break;
+
+			case 2:
+				cDuty = 50;
+				timer_setFanDutyCycle(cDuty);
+				break;
+
+			case 3:
+				cDuty = 75;
+				timer_setFanDutyCycle(cDuty);
+				break;
+
+			case 4:
+				cDuty = 100;
+				timer_setFanDutyCycle(cDuty);
+				break;
+		}
+	} /* if(SWITCH_ON == ledswi_getSwitchStatus(3)) */
+
+	return cDuty;
+}
+
+/* ********************************************************************************************************* */
+/* Method name:        uiFunctions_computeAndSendTemp                                                        */
+/* Method description: convert and send temperature to host by serial if done and timeout is reached         */
+/* Input params:       ipAdcValue = pointer to ADC 8-bit converted value                                     */
+/*                     ipTemp     = pointer to converted temperature (in Celsius degrees)                    */
+/*                     iCeeTime   = main cycle time in microseconds                                          */
+/* Output params:      n/a                                                                                   */
+/* ********************************************************************************************************* */
+void uiFunctions_computeAndSendTemp(int* ipAdcValue, int* ipTemp, const int iCeeTime)
+{
+	static int iCount = 1;
+	int i;
+	char cvTemp [5] = "     ";
+
+	/* if timeout is reached */
+	if(COMPUTE_TEMP_TIME <= iCount*iCeeTime/1000)
+	{
+		/* if timeout is reached and conversion is done, compute new ADC value and temperature */
+		if(adc_isAdcDone())
+		{
+			*ipAdcValue = adc_getConvertionValue();
+			*ipTemp = adc_convertAdc2Temp(*ipAdcValue);
+			adc_initConvertion();
+		}
+
+		/* send to host last ready temperature value */
+
+		uiFunctions_convertNum2Str(*ipTemp,cvTemp);
+		serial_sendBuffer('T');
+		serial_sendBuffer('e');
+		serial_sendBuffer('m');
+		serial_sendBuffer('p');
+		serial_sendBuffer(' ');
+		serial_sendBuffer('=');
+		for(i=0;i<5;i++)
+		{
+			serial_sendBuffer(cvTemp[i]);
+		}
+		serial_sendBuffer('o');
+		serial_sendBuffer('C');
+
+		iCount = 1;
+	} /* if(COMPUTE_TEMP_TIME <= iCount*iCeeTime/1000) */
+	else
+	{
+		iCount++;
+	}
+
+}
