@@ -18,7 +18,8 @@ Sources/main.o: ../Sources/main.c \
  ../Sources/Util/timer_counter.h ../Sources/mcg_hal.h \
  ../Sources/Fan/fan_hal.h ../Sources/Tacometer/tacometer_hal.h \
  ../Sources/Serial/serial_hal.h ../Sources/KL25Z/es670_peripheral_board.h \
- ../SDK/platform/devices/MKL25Z4/include/MKL25Z4.h
+ ../SDK/platform/devices/MKL25Z4/include/MKL25Z4.h \
+ ../Sources/LedSwi/ledswi_hal.h
 
 ../SDK/platform/devices/fsl_device_registers.h:
 
@@ -71,3 +72,5 @@ c:\freescale\ksdk_1.2.0\platform\hal\src\sim\mkl25z4\fsl_sim_hal_mkl25z4.h:
 ../Sources/KL25Z/es670_peripheral_board.h:
 
 ../SDK/platform/devices/MKL25Z4/include/MKL25Z4.h:
+
+../Sources/LedSwi/ledswi_hal.h:

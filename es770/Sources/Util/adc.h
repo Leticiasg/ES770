@@ -76,4 +76,8 @@ uint16_t adc_read(uint16_t ch);
 
 int adc_getValue(int i);
 
+uint16_t adc_read2(void);
+
+void adc_initConvertion2(uint16_t ch);
+
 #endif /* UTIL_ADC_H_ */

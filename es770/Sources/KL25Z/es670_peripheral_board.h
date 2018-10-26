@@ -145,27 +145,42 @@
 #define OUTPUT_LED_PIN1_DIR             (GPIO_OUTPUT << OUTPUT_LED_PIN1)
 
 #define OUTPUT_LED_PIN2					4U
-#define OUTPUT_LED_PIN1_DIR             (GPIO_OUTPUT << OUTPUT_LED_PIN2)
+#define OUTPUT_LED_PIN2_DIR             (GPIO_OUTPUT << OUTPUT_LED_PIN2)
 
 #define OUTPUT_LED_PIN3					3U
-#define OUTPUT_LED_PIN1_DIR             (GPIO_OUTPUT << OUTPUT_LED_PIN3)
+#define OUTPUT_LED_PIN3_DIR             (GPIO_OUTPUT << OUTPUT_LED_PIN3)
 
 #define OUTPUT_LED_PIN4					2U
-#define OUTPUT_LED_PIN1_DIR             (GPIO_OUTPUT << OUTPUT_LED_PIN4)
+#define OUTPUT_LED_PIN4_DIR             (GPIO_OUTPUT << OUTPUT_LED_PIN4)
 
 #define OUTPUT_LED_PIN5					11U
-#define OUTPUT_LED_PIN1_DIR             (GPIO_OUTPUT << OUTPUT_LED_PIN5)
+#define OUTPUT_LED_PIN5_DIR             (GPIO_OUTPUT << OUTPUT_LED_PIN5)
 
 /*                 LED and SWITCH Definitions                    */
-//#define LS_PORT_BASE_PNT            PORTA                                   /* peripheral port base pointer */
-//#define LS_GPIO_BASE_PNT            PTA                                     /* peripheral gpio base pointer */
+#define LS_PORT_BASE_PNT            PORTA                                   /* peripheral port base pointer */
+#define LS_GPIO_BASE_PNT            PTA                                     /* peripheral gpio base pointer */
 
 /* THIS PIN CONFLICTS WITH PTA1 USED AS UART0_RX IN THE OPENSDA SERIAL DEBUG PORT */
-//#define LS1_PIN                     1U                                      /* led/switch #1 pin */
-//#define LS1_DIR_OUTPUT              (GPIO_OUTPUT << LS1_PIN)
-//#define LS1_DIR_INPUT               (GPIO_OUTPUT << LS1_PIN)
-//#define LS1_ALT                     0x01u                                   /* GPIO alternative */
+#define LS1_PIN                     1U                                      /* led/switch #1 pin */
+#define LS1_DIR_OUTPUT              (GPIO_OUTPUT << LS1_PIN)
+#define LS1_DIR_INPUT               (GPIO_OUTPUT << LS1_PIN)
+#define LS1_ALT                     0x01u                                   /* GPIO alternative */
 
+/* THIS PIN CONFLICTS WITH PTA2 USED AS UART0_TX IN THE OPENSDA SERIAL DEBUG PORT */
+#define LS2_PIN                     2U                                      /* led/switch #2 pin */
+#define LS2_DIR_OUTPUT              (GPIO_OUTPUT << LS2_PIN)
+#define LS2_DIR_INPUT               (GPIO_OUTPUT << LS2_PIN)
+#define LS2_ALT                     LS1_ALT
+
+#define LS3_PIN                     4U                                      /* led/switch #3 pin */
+#define LS3_DIR_OUTPUT              (GPIO_OUTPUT << LS3_PIN)
+#define LS3_DIR_INPUT               (GPIO_OUTPUT << LS3_PIN)
+#define LS3_ALT                     LS1_ALT
+
+#define LS4_PIN                     5U                                      /* led/switch #4 pin */
+#define LS4_DIR_OUTPUT              (GPIO_OUTPUT << LS4_PIN)
+#define LS4_DIR_INPUT               (GPIO_OUTPUT << LS4_PIN)
+#define LS4_ALT                     LS1_ALT
 
 
 /*                 END OF LED and SWITCH definitions             */

@@ -31,13 +31,14 @@
 #include "Serial/serial_hal.h"
 #include "KL25Z/es670_peripheral_board.h"
 //#include "Protocolo/cmdmachine_hal.h"
+#include "LedSwi/ledswi_hal.h"
 #include <stdio.h>
 
 /* defines */
 
  /* in micro seconds = mili seconds * 1000 */
 /* recommend value for operating control */
-#define CYCLIC_EXECUTIVE_PERIOD    300*1000
+#define CYCLIC_EXECUTIVE_PERIOD    2000*1000
 
 #define MAXSPEED_STABLE_TIME 6000 /* aprox. time to stabilization in miliseconds */
 
@@ -65,8 +66,8 @@ void main_initOutputLeds(void)
 	 SIM_SCGC5 |= SIM_SCGC5_PORTE(CGC_CLOCK_ENABLED);
 	 SIM_SCGC5 |= SIM_SCGC5_PORTB(CGC_CLOCK_ENABLED);
 
-	 GPIOE_PDDR |= GPIO_PDDR_PDD(OUTPUT_LED_PIN1 | OUTPUT_LED_PIN2 | OUTPUT_LED_PIN3 | OUTPUT_LED_PIN4);
-	 GPIOB_PDDR |= GPIO_PDDR_PDD(OUTPUT_LED_PIN5);
+	 GPIOE_PDDR |= GPIO_PDDR_PDD(OUTPUT_LED_PIN1_DIR | OUTPUT_LED_PIN2_DIR | OUTPUT_LED_PIN3_DIR | OUTPUT_LED_PIN4_DIR);
+	 GPIOB_PDDR |= GPIO_PDDR_PDD(OUTPUT_LED_PIN5_DIR);
 }
 
 void main_OuputLeds_setVal(char cLedNum,int iVal)
@@ -171,10 +172,12 @@ int main(void)
 //
 //	int iCnt = 0;
 
-	int ref = 0x15;
+	int ref = 0x5;
 
+	int iSensor[5] = {0,0,0,0,0};
 
-
+	int i = 0;
+	int j = 0;
 	/* initialization functions */
 	mcg_clockInit();
 //	timer_initTPM1AsPWM();
@@ -188,9 +191,12 @@ int main(void)
 	tc_installLptmr0(CYCLIC_EXECUTIVE_PERIOD, main_cyclicExecuteIsr);
 
 	/* initiate first adc conversion */
-	adc_initConvertion();
+	//adc_initConvertion();
+	adc_initConvertion2(0);
 
-	main_initOutputLeds();
+//	main_initOutputLeds();
+
+	ledswi_initLedSwitch(4,0);
 
 	/* set cooler fan PWM to 100% for reference setting */
 //	timer_setFanDutyCycle(100);
@@ -202,25 +208,46 @@ int main(void)
 	/* cooperative cyclic executive main loop */
     for (;;) {
 
-    	int iSensor1 = adc_getValue(1);
-    	int iLedVal1 = iSensor1>ref;
-    	main_OuputLeds_setVal(1,(iLedVal1));
+//    	ledswi_setLed(4);
 
-    	int iSensor2 = adc_getValue(2);
-    	int iLedVal2 = iSensor2>ref;
-		main_OuputLeds_setVal(1,(iLedVal2));
 
-		int iSensor3 = adc_getValue(3);
-		int iLedVal3 = iSensor3>ref;
-		main_OuputLeds_setVal(1,(iLedVal3));
+    	if(adc_isAdcDone())
+    	{
+    		iSensor[i] = adc_read2();
+    		i++;
+    		if(i>1)
+    			i=0;
+    		adc_initConvertion2(i);
+    	}
 
-		int iSensor4 = adc_getValue(4);
-		int iLedVal4 = iSensor4>ref;
-		main_OuputLeds_setVal(1,(iLedVal4));
+//     	int iSensor1 = adc_getValue(1);
+    	int iLedVal1 = iSensor[0]>ref;
+//    	main_OuputLeds_setVal(1,(iLedVal1));
+    	if(iLedVal1)
+    		ledswi_setLed(3);
+    	else
+    		ledswi_clearLed(3);
 
-		int iSensor5 = adc_getValue(5);
-		int iLedVal5 = iSensor5>ref;
-		main_OuputLeds_setVal(1,(iLedVal5));
+//    	int iSensor2 = adc_getValue(2);
+    	int iLedVal2 = iSensor[1]>ref;
+
+    	if(iLedVal2)
+			ledswi_setLed(4);
+		else
+			ledswi_clearLed(4);
+//		main_OuputLeds_setVal(2,(iLedVal2));
+
+//		int iSensor3 = adc_getValue(3);
+		int iLedVal3 = iSensor[2]>ref;
+//		main_OuputLeds_setVal(3,(iLedVal3));
+
+//		int iSensor4 = adc_getValue(4);
+		int iLedVal4 = iSensor[3]>ref;
+//		main_OuputLeds_setVal(4,(iLedVal4));
+
+//		int iSensor5 = adc_getValue(5);
+		int iLedVal5 = iSensor[4]>ref;
+//		main_OuputLeds_setVal(5,(iLedVal5));
 
 
 //    	printf("%d %d %d %d %d\n",iSensor1,iSensor2,iSensor3,iSensor4,iSensor5);
@@ -305,7 +332,10 @@ int main(void)
 		/* WAIT FOR CYCLIC EXECUTIVE PERIOD */
 //		while(!uiFlagNextPeriod);
 //		uiFlagNextPeriod = 0;
+//		j++;
 
+		for(j=0;j<50;j++)
+			util_genDelay10ms();
     }
     /* Never leave main */
     return 0;

@@ -36,6 +36,8 @@ const unsigned char tabela_temp[256] = {
 		73, 73, 73, 73, 74, 74, 75, 75, 75, 75, 76, 76, 77, 77, 77, 77	/*255*/
 };
 
+const int iTabelaAdc[5] = {ADC_4,ADC_5,ADC_6,ADC_7,ADC_8};
+
 /* ************************************************** */
 /* Method name: 	   adc_initADCModule              */
 /* Method description: configure ADC module           */
@@ -153,6 +155,18 @@ uint16_t adc_read(uint16_t ch)
 	while(!(ADC0_SC1A & ADC_SC1_COCO_MASK)); // Run until the conversion is complete
 	return ADC0_RA;
 }
+
+void adc_initConvertion2(uint16_t ch)
+{
+	ADC0_SC1A = iTabelaAdc[ch] & ADC_SC1_ADCH_MASK;
+}
+
+uint16_t adc_read2(void)
+{
+	if(adc_isAdcDone())
+		return ADC0_RA;
+}
+
 
 /* ************************************************** */
 /* Method name: 	   adc_getConvertionValue         */

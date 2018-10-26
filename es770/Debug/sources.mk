@@ -2,7 +2,6 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
-ELF_SRCS := 
 O_SRCS := 
 CPP_SRCS := 
 C_UPPER_SRCS := 
@@ -13,7 +12,6 @@ ASM_SRCS :=
 CXX_SRCS := 
 C++_SRCS := 
 CC_SRCS := 
-SECONDARY_SIZE := 
 C++_DEPS := 
 OBJS := 
 C_DEPS := 
@@ -30,6 +28,7 @@ Sources \
 Sources/Util \
 Sources/Tacometer \
 Sources/Serial \
+Sources/LedSwi \
 Sources/Fan \
 Project_Settings/Startup_Code \
 

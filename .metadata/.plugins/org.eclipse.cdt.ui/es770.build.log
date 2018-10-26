@@ -1,11 +1,15 @@
-22:07:26 **** Incremental Build of configuration Debug for project es770 ****
+22:17:30 **** Incremental Build of configuration Debug for project es770 ****
 make all 
-'Invoking: Cross ARM GNU Print Size'
-arm-none-eabi-size --format=berkeley "es770.elf"
-   text	   data	    bss	    dec	    hex	filename
-  13184	    132	   2132	  15448	   3c58	es770.elf
-'Finished building: es770.siz'
+'Building file: ../Sources/main.c'
+'Invoking: Cross ARM C Compiler'
+arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -D"CPU_MKL25Z128VLK4" -I"../Sources" -I"../Project_Settings/Startup_Code" -I"../SDK/platform/CMSIS/Include" -I"../SDK/platform/devices" -I"../SDK/platform/devices/MKL25Z4/include" -I"C:\Freescale\KSDK_1.2.0\platform\drivers\inc" -I"C:\Freescale\KSDK_1.2.0\platform\utilities\inc" -I"C:\Freescale\KSDK_1.2.0\platform\hal\inc" -I"C:\Freescale\KSDK_1.2.0\platform\system\inc" -I"C:\Freescale\KSDK_1.2.0\platform\osa\inc" -I"C:\Freescale\KSDK_1.2.0/platform/utilities/inc" -I"C:\Freescale\KSDK_1.2.0/platform/utilities/src" -std=c99 -MMD -MP -MF"Sources/main.d" -MT"Sources/main.o" -c -o "Sources/main.o" "../Sources/main.c"
+'Finished building: ../Sources/main.c'
+' '
+'Building target: es770.elf'
+'Invoking: Cross ARM C++ Linker'
+arm-none-eabi-g++ -mcpu=cortex-m0plus -mthumb -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -T "MKL25Z128xxx4_flash.ld" -Xlinker --gc-sections -L"C:/Users/aluno/Desktop/ES770-155298-156158/es770/Project_Settings/Linker_Files" -Wl,-Map,"es770.map" -specs=nosys.specs -specs=nano.specs -o "es770.elf"  ./Sources/Util/adc.o ./Sources/Util/debugUart.o ./Sources/Util/pid.o ./Sources/Util/tc_hal.o ./Sources/Util/timer_counter.o ./Sources/Util/util.o  ./Sources/Tacometer/tacometer_hal.o  ./Sources/Serial/serial_hal.o  ./Sources/LedSwi/ledswi_hal.o  ./Sources/Fan/fan_hal.o  ./Sources/fsl_debug_console.o ./Sources/main.o ./Sources/mcg_hal.o ./Sources/print_scan.o  ./Project_Settings/Startup_Code/startup.o ./Project_Settings/Startup_Code/startup_MKL25Z4.o ./Project_Settings/Startup_Code/system_MKL25Z4.o  C:/Freescale/KSDK_1.2.0/lib/ksdk_platform_lib/kds/KL25Z4/debug/libksdk_platform.a 
+'Finished building target: es770.elf'
 ' '
 
-22:07:26 Build Finished (took 676ms)
+22:17:31 Build Finished (took 1s.581ms)
 
