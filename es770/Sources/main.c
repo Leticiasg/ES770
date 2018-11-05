@@ -26,7 +26,7 @@
 #include "Util/tc_hal.h"
 #include "Util/timer_counter.h"
 #include "mcg_hal.h"
-#include "Fan/fan_hal.h"
+//#include "Fan/fan_hal.h"
 #include "Tacometer/tacometer_hal.h"
 #include "Serial/serial_hal.h"
 #include "KL25Z/es670_peripheral_board.h"
@@ -181,10 +181,10 @@ int main(void)
 	/* initialization functions */
 	mcg_clockInit();
 //	timer_initTPM1AsPWM();
-//	timer_coolerfan_init();
 //	tacometer_init();
 	debugUart_init();
 	adc_initADCModule();
+	timer_initMotor();
 //	timer_initHeater();
 //	lcd_initLcd();
 //	buzzer_init();
@@ -203,6 +203,9 @@ int main(void)
 
 	/* initialize PID struct */
 //	pid_PidInitialize(&pdtContrData);
+
+	timer_changeMotor1Pwm(50);
+	timer_changeMotor2Pwm(50);
 
 
 	/* cooperative cyclic executive main loop */

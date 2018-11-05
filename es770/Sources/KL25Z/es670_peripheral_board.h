@@ -28,32 +28,47 @@
 #define ALT3                        0X03U
 #define ALT4                        0X04U
 #define FTM_CLKIN0                  ALT4
+#define FTM_CLKIN1                  ALT4
 
 
 /*                 END OF General uC definitions         */
 
-/*                 Fan definitions              */
-
-#define FAN_PORT_BASE_PNT           PORTA
-#define FAN_GPIO_BASE_PNT           PTA
-
-#define FAN_PIN                     13U
-#define FAN_GPIO_ALT                ALT1
-#define FAN_PWM_ALT                 ALT3
-#define FAN_DIR                     (GPIO_OUTPUT << FAN_PIN)
-
-/*                 END OF Fan definitions              */
-
-/*                 Heater definitions                  */
-
-#define HEATER_PORT_BASE_PNT           PORTA
-#define HEATER_GPIO_BASE_PNT           PTA
-
-#define HEATER_PIN                     12U
-#define HEATER_PWM_ALT                 ALT3
-#define HEATER_DIR                     (GPIO_OUTPUT << HEATER_PIN)
+///*                 Fan definitions              */
+//
+//#define FAN_PORT_BASE_PNT           PORTA
+//#define FAN_GPIO_BASE_PNT           PTA
+//
+//#define FAN_PIN                     13U
+//#define FAN_GPIO_ALT                ALT1
+//#define FAN_PWM_ALT                 ALT3
+//#define FAN_DIR                     (GPIO_OUTPUT << FAN_PIN)
+//
+///*                 END OF Fan definitions              */
+//
+///*                 Heater definitions                  */
+//
+//#define HEATER_PORT_BASE_PNT           PORTA
+//#define HEATER_GPIO_BASE_PNT           PTA
+//
+//#define HEATER_PIN                     12U
+//#define HEATER_PWM_ALT                 ALT3
+//#define HEATER_DIR                     (GPIO_OUTPUT << HEATER_PIN)
 
 /*                 END OF Heater definitions            */
+
+/*                 Motor definitions              */
+
+#define MOTOR_PORT_BASE_PNT            PORTA
+#define MOTOR_GPIO_BASE_PNT            PTA
+#define MOTOR_PWM_ALT                  ALT3
+
+#define MOTOR1_PIN                     13U
+#define MOTOR1_DIR                     (GPIO_OUTPUT << MOTOR1_PIN)
+
+#define MOTOR2_PIN                     12U
+#define MOTOR2_DIR                     (GPIO_OUTPUT << MOTOR2_PIN)
+
+/*                 END OF Motor definitions            */
 
 /*                 Temperature sensor definitions       */
 #define TEMPSENSOR_PORT_BASE_PNT       PORTE
@@ -101,6 +116,7 @@
 #define SIM_SOPT2_TPMSRC_OSCERCCLK      2u
 #define SIM_SOPT2_CLKOUTSEL_OSCERCCLK   6u
 #define SIM_SOPT4_TPMCLKSEL_TPM_CLKIN0  0u
+#define SIM_SOPT4_TPMCLKSEL_TPM_CLKIN1  1u
 
 /* definitions for input capture mode*/
 #define TPM_SC_CPWMS_INPUT_CAPTURE      0u
@@ -134,7 +150,7 @@
 #define TACOMETER2_ALT               FTM_CLKIN1
 #define TACOMETER2_DIR               GPIO_INPUT
 
-#define TACOMETER2_TPM_BASE			TPM0
+#define TACOMETER2_TPM_BASE			TPM2
 
 /*                 END OF Tacometer2 definitions       */
 

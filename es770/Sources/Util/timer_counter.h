@@ -25,7 +25,7 @@ void timer_initTPM1AsPWM(void);
 /* Input params:       n/a                          */
 /* Output params:      n/a                          */
 /* ************************************************ */
-void timer_coolerfan_init(void);
+//void timer_coolerfan_init(void);
 
 /* ************************************************ */
 /* Method name:        timer_initHeater             */
@@ -33,7 +33,7 @@ void timer_coolerfan_init(void);
 /* Input params:       n/a                          */
 /* Output params:      n/a                          */
 /* ************************************************ */
-void timer_initHeater(void);
+//void timer_initHeater(void);
 
 /* ************************************************** */
 /* Method name:        timer_setFanDutyCycle          */
@@ -42,7 +42,7 @@ void timer_initHeater(void);
 /* Input params:       cDutyCycle = duty cycle (in %) */
 /* Output params:      n/a                            */
 /* ************************************************** */
-void timer_setFanDutyCycle(char cDutyCycle);
+//void timer_setFanDutyCycle(char cDutyCycle);
 
 /* ************************************************ */
 /* Method name:        timer_changeHeaterPwm        */
@@ -50,6 +50,10 @@ void timer_setFanDutyCycle(char cDutyCycle);
 /* Input params:       pwm desired (percentage)     */
 /* Output params:      n/a                          */
 /* ************************************************ */
-void timer_changeHeaterPwm(int iPwm);
+//void timer_changeHeaterPwm(int iPwm);
+
+void timer_initMotor(void);
+void timer_changeMotor1Pwm(int iPwm);
+void timer_changeMotor2Pwm(int iPwm);
 
 #endif /* UTIL_TIMER_COUNTER_H */
