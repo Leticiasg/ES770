@@ -29,6 +29,6 @@ Sources/Util \
 Sources/Tacometer \
 Sources/Serial \
 Sources/LedSwi \
-Sources/Fan \
+Sources/Encoder \
 Project_Settings/Startup_Code \
 

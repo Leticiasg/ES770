@@ -1,5 +1,114 @@
-21:36:12 **** Build of configuration debug for project ksdk_platform_lib_KL25Z4 ****
+19:25:33 **** Incremental Build of configuration debug for project ksdk_platform_lib_KL25Z4 ****
 make -k all 
+'Building file: C:/Freescale/KSDK_1.2.0/platform/hal/src/uart/fsl_uart_hal.c'
+'Invoking: Cross ARM C Compiler'
+arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g -DDEBUG -DCPU_MKL25Z128VLK4 -DFRDM_KL25Z -DFREEDOM -I../../../../../platform/CMSIS/Include -I../../../../../platform/devices -I../../../../../platform/devices/MKL25Z4/include -I../../../../../platform/devices/MKL25Z4/startup -I../../../../../platform/utilities/inc -I../../../../../platform/hal/inc -I../../../../../platform/drivers/inc -I../../../../../platform/system/inc -I../../../../../platform/osa/inc -std=gnu99 -fno-common  -ffreestanding  -fno-builtin  -mapcs -MMD -MP -MF"platform/uart/hal/fsl_uart_hal.d" -MT"platform/uart/hal/fsl_uart_hal.o" -c -o "platform/uart/hal/fsl_uart_hal.o" "C:/Freescale/KSDK_1.2.0/platform/hal/src/uart/fsl_uart_hal.c"
+'Finished building: C:/Freescale/KSDK_1.2.0/platform/hal/src/uart/fsl_uart_hal.c'
+' '
+'Building file: C:/Freescale/KSDK_1.2.0/platform/drivers/src/uart/fsl_uart_common.c'
+'Invoking: Cross ARM C Compiler'
+arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g -DDEBUG -DCPU_MKL25Z128VLK4 -DFRDM_KL25Z -DFREEDOM -I../../../../../platform/CMSIS/Include -I../../../../../platform/devices -I../../../../../platform/devices/MKL25Z4/include -I../../../../../platform/devices/MKL25Z4/startup -I../../../../../platform/utilities/inc -I../../../../../platform/hal/inc -I../../../../../platform/drivers/inc -I../../../../../platform/system/inc -I../../../../../platform/osa/inc -std=gnu99 -fno-common  -ffreestanding  -fno-builtin  -mapcs -MMD -MP -MF"platform/uart/drivers/fsl_uart_common.d" -MT"platform/uart/drivers/fsl_uart_common.o" -c -o "platform/uart/drivers/fsl_uart_common.o" "C:/Freescale/KSDK_1.2.0/platform/drivers/src/uart/fsl_uart_common.c"
+'Finished building: C:/Freescale/KSDK_1.2.0/platform/drivers/src/uart/fsl_uart_common.c'
+' '
+'Building file: C:/Freescale/KSDK_1.2.0/platform/drivers/src/uart/fsl_uart_dma_driver.c'
+'Invoking: Cross ARM C Compiler'
+arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g -DDEBUG -DCPU_MKL25Z128VLK4 -DFRDM_KL25Z -DFREEDOM -I../../../../../platform/CMSIS/Include -I../../../../../platform/devices -I../../../../../platform/devices/MKL25Z4/include -I../../../../../platform/devices/MKL25Z4/startup -I../../../../../platform/utilities/inc -I../../../../../platform/hal/inc -I../../../../../platform/drivers/inc -I../../../../../platform/system/inc -I../../../../../platform/osa/inc -std=gnu99 -fno-common  -ffreestanding  -fno-builtin  -mapcs -MMD -MP -MF"platform/uart/drivers/fsl_uart_dma_driver.d" -MT"platform/uart/drivers/fsl_uart_dma_driver.o" -c -o "platform/uart/drivers/fsl_uart_dma_driver.o" "C:/Freescale/KSDK_1.2.0/platform/drivers/src/uart/fsl_uart_dma_driver.c"
+'Finished building: C:/Freescale/KSDK_1.2.0/platform/drivers/src/uart/fsl_uart_dma_driver.c'
+' '
+'Building file: C:/Freescale/KSDK_1.2.0/platform/drivers/src/uart/fsl_uart_driver.c'
+'Invoking: Cross ARM C Compiler'
+arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g -DDEBUG -DCPU_MKL25Z128VLK4 -DFRDM_KL25Z -DFREEDOM -I../../../../../platform/CMSIS/Include -I../../../../../platform/devices -I../../../../../platform/devices/MKL25Z4/include -I../../../../../platform/devices/MKL25Z4/startup -I../../../../../platform/utilities/inc -I../../../../../platform/hal/inc -I../../../../../platform/drivers/inc -I../../../../../platform/system/inc -I../../../../../platform/osa/inc -std=gnu99 -fno-common  -ffreestanding  -fno-builtin  -mapcs -MMD -MP -MF"platform/uart/drivers/fsl_uart_driver.d" -MT"platform/uart/drivers/fsl_uart_driver.o" -c -o "platform/uart/drivers/fsl_uart_driver.o" "C:/Freescale/KSDK_1.2.0/platform/drivers/src/uart/fsl_uart_driver.c"
+'Finished building: C:/Freescale/KSDK_1.2.0/platform/drivers/src/uart/fsl_uart_driver.c'
+' '
+'Building file: C:/Freescale/KSDK_1.2.0/platform/hal/src/tsi/fsl_tsi_hal.c'
+'Invoking: Cross ARM C Compiler'
+arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g -DDEBUG -DCPU_MKL25Z128VLK4 -DFRDM_KL25Z -DFREEDOM -I../../../../../platform/CMSIS/Include -I../../../../../platform/devices -I../../../../../platform/devices/MKL25Z4/include -I../../../../../platform/devices/MKL25Z4/startup -I../../../../../platform/utilities/inc -I../../../../../platform/hal/inc -I../../../../../platform/drivers/inc -I../../../../../platform/system/inc -I../../../../../platform/osa/inc -std=gnu99 -fno-common  -ffreestanding  -fno-builtin  -mapcs -MMD -MP -MF"platform/tsi/hal/fsl_tsi_hal.d" -MT"platform/tsi/hal/fsl_tsi_hal.o" -c -o "platform/tsi/hal/fsl_tsi_hal.o" "C:/Freescale/KSDK_1.2.0/platform/hal/src/tsi/fsl_tsi_hal.c"
+'Finished building: C:/Freescale/KSDK_1.2.0/platform/hal/src/tsi/fsl_tsi_hal.c'
+' '
+'Building file: C:/Freescale/KSDK_1.2.0/platform/hal/src/tsi/fsl_tsi_v4_hal_specific.c'
+'Invoking: Cross ARM C Compiler'
+arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g -DDEBUG -DCPU_MKL25Z128VLK4 -DFRDM_KL25Z -DFREEDOM -I../../../../../platform/CMSIS/Include -I../../../../../platform/devices -I../../../../../platform/devices/MKL25Z4/include -I../../../../../platform/devices/MKL25Z4/startup -I../../../../../platform/utilities/inc -I../../../../../platform/hal/inc -I../../../../../platform/drivers/inc -I../../../../../platform/system/inc -I../../../../../platform/osa/inc -std=gnu99 -fno-common  -ffreestanding  -fno-builtin  -mapcs -MMD -MP -MF"platform/tsi/hal/fsl_tsi_v4_hal_specific.d" -MT"platform/tsi/hal/fsl_tsi_v4_hal_specific.o" -c -o "platform/tsi/hal/fsl_tsi_v4_hal_specific.o" "C:/Freescale/KSDK_1.2.0/platform/hal/src/tsi/fsl_tsi_v4_hal_specific.c"
+C:/Freescale/KSDK_1.2.0/platform/hal/src/tsi/fsl_tsi_v4_hal_specific.c: In function 'TSI_HAL_Recalibrate':
+C:/Freescale/KSDK_1.2.0/platform/hal/src/tsi/fsl_tsi_v4_hal_specific.c:167:44: warning: 'elec' may be used uninitialized in this function [-Wmaybe-uninitialized]
+           res = TSI_HAL_MeasurementBlocking(base, elec, 1);
+                                            ^
+'Finished building: C:/Freescale/KSDK_1.2.0/platform/hal/src/tsi/fsl_tsi_v4_hal_specific.c'
+' '
+'Building file: C:/Freescale/KSDK_1.2.0/platform/drivers/src/tsi/fsl_tsi_common.c'
+'Invoking: Cross ARM C Compiler'
+arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g -DDEBUG -DCPU_MKL25Z128VLK4 -DFRDM_KL25Z -DFREEDOM -I../../../../../platform/CMSIS/Include -I../../../../../platform/devices -I../../../../../platform/devices/MKL25Z4/include -I../../../../../platform/devices/MKL25Z4/startup -I../../../../../platform/utilities/inc -I../../../../../platform/hal/inc -I../../../../../platform/drivers/inc -I../../../../../platform/system/inc -I../../../../../platform/osa/inc -std=gnu99 -fno-common  -ffreestanding  -fno-builtin  -mapcs -MMD -MP -MF"platform/tsi/drivers/fsl_tsi_common.d" -MT"platform/tsi/drivers/fsl_tsi_common.o" -c -o "platform/tsi/drivers/fsl_tsi_common.o" "C:/Freescale/KSDK_1.2.0/platform/drivers/src/tsi/fsl_tsi_common.c"
+'Finished building: C:/Freescale/KSDK_1.2.0/platform/drivers/src/tsi/fsl_tsi_common.c'
+' '
+'Building file: C:/Freescale/KSDK_1.2.0/platform/drivers/src/tsi/fsl_tsi_driver.c'
+'Invoking: Cross ARM C Compiler'
+arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g -DDEBUG -DCPU_MKL25Z128VLK4 -DFRDM_KL25Z -DFREEDOM -I../../../../../platform/CMSIS/Include -I../../../../../platform/devices -I../../../../../platform/devices/MKL25Z4/include -I../../../../../platform/devices/MKL25Z4/startup -I../../../../../platform/utilities/inc -I../../../../../platform/hal/inc -I../../../../../platform/drivers/inc -I../../../../../platform/system/inc -I../../../../../platform/osa/inc -std=gnu99 -fno-common  -ffreestanding  -fno-builtin  -mapcs -MMD -MP -MF"platform/tsi/drivers/fsl_tsi_driver.d" -MT"platform/tsi/drivers/fsl_tsi_driver.o" -c -o "platform/tsi/drivers/fsl_tsi_driver.o" "C:/Freescale/KSDK_1.2.0/platform/drivers/src/tsi/fsl_tsi_driver.c"
+'Finished building: C:/Freescale/KSDK_1.2.0/platform/drivers/src/tsi/fsl_tsi_driver.c'
+' '
+'Building file: C:/Freescale/KSDK_1.2.0/platform/drivers/src/tsi/fsl_tsi_v4_driver_specific.c'
+'Invoking: Cross ARM C Compiler'
+arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g -DDEBUG -DCPU_MKL25Z128VLK4 -DFRDM_KL25Z -DFREEDOM -I../../../../../platform/CMSIS/Include -I../../../../../platform/devices -I../../../../../platform/devices/MKL25Z4/include -I../../../../../platform/devices/MKL25Z4/startup -I../../../../../platform/utilities/inc -I../../../../../platform/hal/inc -I../../../../../platform/drivers/inc -I../../../../../platform/system/inc -I../../../../../platform/osa/inc -std=gnu99 -fno-common  -ffreestanding  -fno-builtin  -mapcs -MMD -MP -MF"platform/tsi/drivers/fsl_tsi_v4_driver_specific.d" -MT"platform/tsi/drivers/fsl_tsi_v4_driver_specific.o" -c -o "platform/tsi/drivers/fsl_tsi_v4_driver_specific.o" "C:/Freescale/KSDK_1.2.0/platform/drivers/src/tsi/fsl_tsi_v4_driver_specific.c"
+'Finished building: C:/Freescale/KSDK_1.2.0/platform/drivers/src/tsi/fsl_tsi_v4_driver_specific.c'
+' '
+'Building file: C:/Freescale/KSDK_1.2.0/platform/hal/src/tpm/fsl_tpm_hal.c'
+'Invoking: Cross ARM C Compiler'
+arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g -DDEBUG -DCPU_MKL25Z128VLK4 -DFRDM_KL25Z -DFREEDOM -I../../../../../platform/CMSIS/Include -I../../../../../platform/devices -I../../../../../platform/devices/MKL25Z4/include -I../../../../../platform/devices/MKL25Z4/startup -I../../../../../platform/utilities/inc -I../../../../../platform/hal/inc -I../../../../../platform/drivers/inc -I../../../../../platform/system/inc -I../../../../../platform/osa/inc -std=gnu99 -fno-common  -ffreestanding  -fno-builtin  -mapcs -MMD -MP -MF"platform/tpm/hal/fsl_tpm_hal.d" -MT"platform/tpm/hal/fsl_tpm_hal.o" -c -o "platform/tpm/hal/fsl_tpm_hal.o" "C:/Freescale/KSDK_1.2.0/platform/hal/src/tpm/fsl_tpm_hal.c"
+'Finished building: C:/Freescale/KSDK_1.2.0/platform/hal/src/tpm/fsl_tpm_hal.c'
+' '
+'Building file: C:/Freescale/KSDK_1.2.0/platform/drivers/src/tpm/fsl_tpm_common.c'
+'Invoking: Cross ARM C Compiler'
+arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g -DDEBUG -DCPU_MKL25Z128VLK4 -DFRDM_KL25Z -DFREEDOM -I../../../../../platform/CMSIS/Include -I../../../../../platform/devices -I../../../../../platform/devices/MKL25Z4/include -I../../../../../platform/devices/MKL25Z4/startup -I../../../../../platform/utilities/inc -I../../../../../platform/hal/inc -I../../../../../platform/drivers/inc -I../../../../../platform/system/inc -I../../../../../platform/osa/inc -std=gnu99 -fno-common  -ffreestanding  -fno-builtin  -mapcs -MMD -MP -MF"platform/tpm/drivers/fsl_tpm_common.d" -MT"platform/tpm/drivers/fsl_tpm_common.o" -c -o "platform/tpm/drivers/fsl_tpm_common.o" "C:/Freescale/KSDK_1.2.0/platform/drivers/src/tpm/fsl_tpm_common.c"
+'Finished building: C:/Freescale/KSDK_1.2.0/platform/drivers/src/tpm/fsl_tpm_common.c'
+' '
+'Building file: C:/Freescale/KSDK_1.2.0/platform/drivers/src/tpm/fsl_tpm_driver.c'
+'Invoking: Cross ARM C Compiler'
+arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g -DDEBUG -DCPU_MKL25Z128VLK4 -DFRDM_KL25Z -DFREEDOM -I../../../../../platform/CMSIS/Include -I../../../../../platform/devices -I../../../../../platform/devices/MKL25Z4/include -I../../../../../platform/devices/MKL25Z4/startup -I../../../../../platform/utilities/inc -I../../../../../platform/hal/inc -I../../../../../platform/drivers/inc -I../../../../../platform/system/inc -I../../../../../platform/osa/inc -std=gnu99 -fno-common  -ffreestanding  -fno-builtin  -mapcs -MMD -MP -MF"platform/tpm/drivers/fsl_tpm_driver.d" -MT"platform/tpm/drivers/fsl_tpm_driver.o" -c -o "platform/tpm/drivers/fsl_tpm_driver.o" "C:/Freescale/KSDK_1.2.0/platform/drivers/src/tpm/fsl_tpm_driver.c"
+'Finished building: C:/Freescale/KSDK_1.2.0/platform/drivers/src/tpm/fsl_tpm_driver.c'
+' '
+'Building file: C:/Freescale/KSDK_1.2.0/platform/hal/src/spi/fsl_spi_hal.c'
+'Invoking: Cross ARM C Compiler'
+arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g -DDEBUG -DCPU_MKL25Z128VLK4 -DFRDM_KL25Z -DFREEDOM -I../../../../../platform/CMSIS/Include -I../../../../../platform/devices -I../../../../../platform/devices/MKL25Z4/include -I../../../../../platform/devices/MKL25Z4/startup -I../../../../../platform/utilities/inc -I../../../../../platform/hal/inc -I../../../../../platform/drivers/inc -I../../../../../platform/system/inc -I../../../../../platform/osa/inc -std=gnu99 -fno-common  -ffreestanding  -fno-builtin  -mapcs -MMD -MP -MF"platform/spi/hal/fsl_spi_hal.d" -MT"platform/spi/hal/fsl_spi_hal.o" -c -o "platform/spi/hal/fsl_spi_hal.o" "C:/Freescale/KSDK_1.2.0/platform/hal/src/spi/fsl_spi_hal.c"
+'Finished building: C:/Freescale/KSDK_1.2.0/platform/hal/src/spi/fsl_spi_hal.c'
+' '
+'Building file: C:/Freescale/KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_dma_slave_driver.c'
+'Invoking: Cross ARM C Compiler'
+arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g -DDEBUG -DCPU_MKL25Z128VLK4 -DFRDM_KL25Z -DFREEDOM -I../../../../../platform/CMSIS/Include -I../../../../../platform/devices -I../../../../../platform/devices/MKL25Z4/include -I../../../../../platform/devices/MKL25Z4/startup -I../../../../../platform/utilities/inc -I../../../../../platform/hal/inc -I../../../../../platform/drivers/inc -I../../../../../platform/system/inc -I../../../../../platform/osa/inc -std=gnu99 -fno-common  -ffreestanding  -fno-builtin  -mapcs -MMD -MP -MF"platform/spi/drivers/slave/fsl_spi_dma_slave_driver.d" -MT"platform/spi/drivers/slave/fsl_spi_dma_slave_driver.o" -c -o "platform/spi/drivers/slave/fsl_spi_dma_slave_driver.o" "C:/Freescale/KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_dma_slave_driver.c"
+'Finished building: C:/Freescale/KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_dma_slave_driver.c'
+' '
+'Building file: C:/Freescale/KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_slave_driver.c'
+'Invoking: Cross ARM C Compiler'
+arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g -DDEBUG -DCPU_MKL25Z128VLK4 -DFRDM_KL25Z -DFREEDOM -I../../../../../platform/CMSIS/Include -I../../../../../platform/devices -I../../../../../platform/devices/MKL25Z4/include -I../../../../../platform/devices/MKL25Z4/startup -I../../../../../platform/utilities/inc -I../../../../../platform/hal/inc -I../../../../../platform/drivers/inc -I../../../../../platform/system/inc -I../../../../../platform/osa/inc -std=gnu99 -fno-common  -ffreestanding  -fno-builtin  -mapcs -MMD -MP -MF"platform/spi/drivers/slave/fsl_spi_slave_driver.d" -MT"platform/spi/drivers/slave/fsl_spi_slave_driver.o" -c -o "platform/spi/drivers/slave/fsl_spi_slave_driver.o" "C:/Freescale/KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_slave_driver.c"
+'Finished building: C:/Freescale/KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_slave_driver.c'
+' '
+'Building file: C:/Freescale/KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_dma_master_driver.c'
+'Invoking: Cross ARM C Compiler'
+arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g -DDEBUG -DCPU_MKL25Z128VLK4 -DFRDM_KL25Z -DFREEDOM -I../../../../../platform/CMSIS/Include -I../../../../../platform/devices -I../../../../../platform/devices/MKL25Z4/include -I../../../../../platform/devices/MKL25Z4/startup -I../../../../../platform/utilities/inc -I../../../../../platform/hal/inc -I../../../../../platform/drivers/inc -I../../../../../platform/system/inc -I../../../../../platform/osa/inc -std=gnu99 -fno-common  -ffreestanding  -fno-builtin  -mapcs -MMD -MP -MF"platform/spi/drivers/master/fsl_spi_dma_master_driver.d" -MT"platform/spi/drivers/master/fsl_spi_dma_master_driver.o" -c -o "platform/spi/drivers/master/fsl_spi_dma_master_driver.o" "C:/Freescale/KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_dma_master_driver.c"
+'Finished building: C:/Freescale/KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_dma_master_driver.c'
+' '
+'Building file: C:/Freescale/KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_master_driver.c'
+'Invoking: Cross ARM C Compiler'
+arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g -DDEBUG -DCPU_MKL25Z128VLK4 -DFRDM_KL25Z -DFREEDOM -I../../../../../platform/CMSIS/Include -I../../../../../platform/devices -I../../../../../platform/devices/MKL25Z4/include -I../../../../../platform/devices/MKL25Z4/startup -I../../../../../platform/utilities/inc -I../../../../../platform/hal/inc -I../../../../../platform/drivers/inc -I../../../../../platform/system/inc -I../../../../../platform/osa/inc -std=gnu99 -fno-common  -ffreestanding  -fno-builtin  -mapcs -MMD -MP -MF"platform/spi/drivers/master/fsl_spi_master_driver.d" -MT"platform/spi/drivers/master/fsl_spi_master_driver.o" -c -o "platform/spi/drivers/master/fsl_spi_master_driver.o" "C:/Freescale/KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_master_driver.c"
+'Finished building: C:/Freescale/KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_master_driver.c'
+' '
+'Building file: C:/Freescale/KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_common.c'
+'Invoking: Cross ARM C Compiler'
+arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g -DDEBUG -DCPU_MKL25Z128VLK4 -DFRDM_KL25Z -DFREEDOM -I../../../../../platform/CMSIS/Include -I../../../../../platform/devices -I../../../../../platform/devices/MKL25Z4/include -I../../../../../platform/devices/MKL25Z4/startup -I../../../../../platform/utilities/inc -I../../../../../platform/hal/inc -I../../../../../platform/drivers/inc -I../../../../../platform/system/inc -I../../../../../platform/osa/inc -std=gnu99 -fno-common  -ffreestanding  -fno-builtin  -mapcs -MMD -MP -MF"platform/spi/drivers/fsl_spi_common.d" -MT"platform/spi/drivers/fsl_spi_common.o" -c -o "platform/spi/drivers/fsl_spi_common.o" "C:/Freescale/KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_common.c"
+'Finished building: C:/Freescale/KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_common.c'
+' '
+'Building file: C:/Freescale/KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_dma_shared_function.c'
+'Invoking: Cross ARM C Compiler'
+arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g -DDEBUG -DCPU_MKL25Z128VLK4 -DFRDM_KL25Z -DFREEDOM -I../../../../../platform/CMSIS/Include -I../../../../../platform/devices -I../../../../../platform/devices/MKL25Z4/include -I../../../../../platform/devices/MKL25Z4/startup -I../../../../../platform/utilities/inc -I../../../../../platform/hal/inc -I../../../../../platform/drivers/inc -I../../../../../platform/system/inc -I../../../../../platform/osa/inc -std=gnu99 -fno-common  -ffreestanding  -fno-builtin  -mapcs -MMD -MP -MF"platform/spi/drivers/fsl_spi_dma_shared_function.d" -MT"platform/spi/drivers/fsl_spi_dma_shared_function.o" -c -o "platform/spi/drivers/fsl_spi_dma_shared_function.o" "C:/Freescale/KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_dma_shared_function.c"
+'Finished building: C:/Freescale/KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_dma_shared_function.c'
+' '
+'Building file: C:/Freescale/KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_shared_function.c'
+'Invoking: Cross ARM C Compiler'
+arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g -DDEBUG -DCPU_MKL25Z128VLK4 -DFRDM_KL25Z -DFREEDOM -I../../../../../platform/CMSIS/Include -I../../../../../platform/devices -I../../../../../platform/devices/MKL25Z4/include -I../../../../../platform/devices/MKL25Z4/startup -I../../../../../platform/utilities/inc -I../../../../../platform/hal/inc -I../../../../../platform/drivers/inc -I../../../../../platform/system/inc -I../../../../../platform/osa/inc -std=gnu99 -fno-common  -ffreestanding  -fno-builtin  -mapcs -MMD -MP -MF"platform/spi/drivers/fsl_spi_shared_function.d" -MT"platform/spi/drivers/fsl_spi_shared_function.o" -c -o "platform/spi/drivers/fsl_spi_shared_function.o" "C:/Freescale/KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_shared_function.c"
+'Finished building: C:/Freescale/KSDK_1.2.0/platform/drivers/src/spi/fsl_spi_shared_function.c'
+' '
+'Building file: C:/Freescale/KSDK_1.2.0/platform/hal/src/smc/fsl_smc_hal.c'
+'Invoking: Cross ARM C Compiler'
+arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g -DDEBUG -DCPU_MKL25Z128VLK4 -DFRDM_KL25Z -DFREEDOM -I../../../../../platform/CMSIS/Include -I../../../../../platform/devices -I../../../../../platform/devices/MKL25Z4/include -I../../../../../platform/devices/MKL25Z4/startup -I../../../../../platform/utilities/inc -I../../../../../platform/hal/inc -I../../../../../platform/drivers/inc -I../../../../../platform/system/inc -I../../../../../platform/osa/inc -std=gnu99 -fno-common  -ffreestanding  -fno-builtin  -mapcs -MMD -MP -MF"platform/smc/hal/fsl_smc_hal.d" -MT"platform/smc/hal/fsl_smc_hal.o" -c -o "platform/smc/hal/fsl_smc_hal.o" "C:/Freescale/KSDK_1.2.0/platform/hal/src/smc/fsl_smc_hal.c"
+'Finished building: C:/Freescale/KSDK_1.2.0/platform/hal/src/smc/fsl_smc_hal.c'
+' '
 'Building file: C:/Freescale/KSDK_1.2.0/platform/hal/src/sim/MKL25Z4/fsl_sim_hal_MKL25Z4.c'
 'Invoking: Cross ARM C Compiler'
 arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g -DDEBUG -DCPU_MKL25Z128VLK4 -DFRDM_KL25Z -DFREEDOM -I../../../../../platform/CMSIS/Include -I../../../../../platform/devices -I../../../../../platform/devices/MKL25Z4/include -I../../../../../platform/devices/MKL25Z4/startup -I../../../../../platform/utilities/inc -I../../../../../platform/hal/inc -I../../../../../platform/drivers/inc -I../../../../../platform/system/inc -I../../../../../platform/osa/inc -std=gnu99 -fno-common  -ffreestanding  -fno-builtin  -mapcs -MMD -MP -MF"platform/sim/hal/fsl_sim_hal_MKL25Z4.d" -MT"platform/sim/hal/fsl_sim_hal_MKL25Z4.o" -c -o "platform/sim/hal/fsl_sim_hal_MKL25Z4.o" "C:/Freescale/KSDK_1.2.0/platform/hal/src/sim/MKL25Z4/fsl_sim_hal_MKL25Z4.c"
@@ -272,5 +381,5 @@ arm-none-eabi-ar: creating libksdk_platform.a
 'Finished building target: libksdk_platform.a'
 ' '
 
-21:36:44 Build Finished (took 31s.368ms)
+19:26:14 Build Finished (took 41s.158ms)
 

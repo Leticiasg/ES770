@@ -61,6 +61,7 @@
 #define MOTOR_PORT_BASE_PNT            PORTA
 #define MOTOR_GPIO_BASE_PNT            PTA
 #define MOTOR_PWM_ALT                  ALT3
+#define MOTOR_GPIO_ALT                 0x01u
 
 #define MOTOR1_PIN                     13U
 #define MOTOR1_DIR                     (GPIO_OUTPUT << MOTOR1_PIN)

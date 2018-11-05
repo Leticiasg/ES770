@@ -129,6 +129,30 @@ void timer_initMotor(void)
 //	TPM1_C0V = iPwm;
 //}
 
+void timer_initMotorAsGpio(void)
+{
+
+	 SIM_SCGC5 |= SIM_SCGC5_PORTA(CGC_CLOCK_ENABLED);
+
+	 PORTA_PCR29 = PORT_PCR_MUX(MOTOR_GPIO_ALT);
+	 PORTA_PCR30 = PORT_PCR_MUX(MOTOR_GPIO_ALT);
+
+	 GPIOA_PDDR |= GPIO_PDDR_PDD(MOTOR1_DIR | MOTOR2_DIR);
+
+}
+
+void timer_MotorGpioEnable(void)
+{
+	GPIOA_PSOR = GPIO_PSOR_PTSO( (0x01U << MOTOR1_PIN) );
+	GPIOA_PSOR = GPIO_PSOR_PTSO( (0x01U << MOTOR2_PIN) );
+}
+
+void timer_MotorGpioDisable(void)
+{
+	GPIOA_PCOR = GPIO_PCOR_PTCO( (0x01U << MOTOR1_PIN) );
+	GPIOA_PCOR = GPIO_PCOR_PTCO( (0x01U << MOTOR2_PIN) );
+}
+
 void timer_changeMotor1Pwm(int iPwm)
 {
 	if(iPwm > MOTOR_MAX_PWM)

@@ -26,8 +26,7 @@
 #include "Util/tc_hal.h"
 #include "Util/timer_counter.h"
 #include "mcg_hal.h"
-//#include "Fan/fan_hal.h"
-#include "Tacometer/tacometer_hal.h"
+#include "Encoder/encoder_hal.h"
 #include "Serial/serial_hal.h"
 #include "KL25Z/es670_peripheral_board.h"
 //#include "Protocolo/cmdmachine_hal.h"
@@ -38,7 +37,7 @@
 
  /* in micro seconds = mili seconds * 1000 */
 /* recommend value for operating control */
-#define CYCLIC_EXECUTIVE_PERIOD    2000*1000
+#define CYCLIC_EXECUTIVE_PERIOD    300*1000
 
 #define MAXSPEED_STABLE_TIME 6000 /* aprox. time to stabilization in miliseconds */
 
@@ -61,53 +60,53 @@ void main_cyclicExecuteIsr(void)
     uiFlagNextPeriod = 1;
 }
 
-void main_initOutputLeds(void)
-{
-	 SIM_SCGC5 |= SIM_SCGC5_PORTE(CGC_CLOCK_ENABLED);
-	 SIM_SCGC5 |= SIM_SCGC5_PORTB(CGC_CLOCK_ENABLED);
-
-	 GPIOE_PDDR |= GPIO_PDDR_PDD(OUTPUT_LED_PIN1_DIR | OUTPUT_LED_PIN2_DIR | OUTPUT_LED_PIN3_DIR | OUTPUT_LED_PIN4_DIR);
-	 GPIOB_PDDR |= GPIO_PDDR_PDD(OUTPUT_LED_PIN5_DIR);
-}
-
-void main_OuputLeds_setVal(char cLedNum,int iVal)
-{
-
-        switch(cLedNum)
-        {
-            case 1:
-                if(iVal)
-                	GPIOE_PSOR = GPIO_PSOR_PTSO( (0x01U << OUTPUT_LED_PIN1) );
-                else
-                	GPIOE_PCOR = GPIO_PCOR_PTCO( (0x01U << OUTPUT_LED_PIN1) );
-                break;
-            case 2:
-            	if(iVal)
-					GPIOE_PSOR = GPIO_PSOR_PTSO( (0x01U << OUTPUT_LED_PIN2) );
-				else
-					GPIOE_PCOR = GPIO_PCOR_PTCO( (0x01U << OUTPUT_LED_PIN2) );
-				break;
-            case 3:
-            	if(iVal)
-					GPIOE_PSOR = GPIO_PSOR_PTSO( (0x01U << OUTPUT_LED_PIN3) );
-				else
-					GPIOE_PCOR = GPIO_PCOR_PTCO( (0x01U << OUTPUT_LED_PIN3) );
-				break;
-            case 4:
-            	if(iVal)
-					GPIOE_PSOR = GPIO_PSOR_PTSO( (0x01U << OUTPUT_LED_PIN4) );
-				else
-					GPIOE_PCOR = GPIO_PCOR_PTCO( (0x01U << OUTPUT_LED_PIN4) );
-				break;
-            case 5:
-            	if(iVal)
-					GPIOB_PSOR = GPIO_PSOR_PTSO( (0x01U << OUTPUT_LED_PIN5) );
-				else
-					GPIOB_PCOR = GPIO_PCOR_PTCO( (0x01U << OUTPUT_LED_PIN5) );
-				break;
-        } /* switch(cLedNum) */
-
-}
+//void main_initOutputLeds(void)
+//{
+//	 SIM_SCGC5 |= SIM_SCGC5_PORTE(CGC_CLOCK_ENABLED);
+//	 SIM_SCGC5 |= SIM_SCGC5_PORTB(CGC_CLOCK_ENABLED);
+//
+//	 GPIOE_PDDR |= GPIO_PDDR_PDD(OUTPUT_LED_PIN1_DIR | OUTPUT_LED_PIN2_DIR | OUTPUT_LED_PIN3_DIR | OUTPUT_LED_PIN4_DIR);
+//	 GPIOB_PDDR |= GPIO_PDDR_PDD(OUTPUT_LED_PIN5_DIR);
+//}
+//
+//void main_OuputLeds_setVal(char cLedNum,int iVal)
+//{
+//
+//        switch(cLedNum)
+//        {
+//            case 1:
+//                if(iVal)
+//                	GPIOE_PSOR = GPIO_PSOR_PTSO( (0x01U << OUTPUT_LED_PIN1) );
+//                else
+//                	GPIOE_PCOR = GPIO_PCOR_PTCO( (0x01U << OUTPUT_LED_PIN1) );
+//                break;
+//            case 2:
+//            	if(iVal)
+//					GPIOE_PSOR = GPIO_PSOR_PTSO( (0x01U << OUTPUT_LED_PIN2) );
+//				else
+//					GPIOE_PCOR = GPIO_PCOR_PTCO( (0x01U << OUTPUT_LED_PIN2) );
+//				break;
+//            case 3:
+//            	if(iVal)
+//					GPIOE_PSOR = GPIO_PSOR_PTSO( (0x01U << OUTPUT_LED_PIN3) );
+//				else
+//					GPIOE_PCOR = GPIO_PCOR_PTCO( (0x01U << OUTPUT_LED_PIN3) );
+//				break;
+//            case 4:
+//            	if(iVal)
+//					GPIOE_PSOR = GPIO_PSOR_PTSO( (0x01U << OUTPUT_LED_PIN4) );
+//				else
+//					GPIOE_PCOR = GPIO_PCOR_PTCO( (0x01U << OUTPUT_LED_PIN4) );
+//				break;
+//            case 5:
+//            	if(iVal)
+//					GPIOB_PSOR = GPIO_PSOR_PTSO( (0x01U << OUTPUT_LED_PIN5) );
+//				else
+//					GPIOB_PCOR = GPIO_PCOR_PTCO( (0x01U << OUTPUT_LED_PIN5) );
+//				break;
+//        } /* switch(cLedNum) */
+//
+//}
 
 int main(void)
 {
@@ -177,14 +176,21 @@ int main(void)
 	int iSensor[5] = {0,0,0,0,0};
 
 	int i = 0;
-	int j = 0;
+
+	int x = 0;
+	int y = 0;
+
 	/* initialization functions */
 	mcg_clockInit();
+	encoder_init();
+
 //	timer_initTPM1AsPWM();
+//	timer_coolerfan_init();
 //	tacometer_init();
 	debugUart_init();
-	adc_initADCModule();
-	timer_initMotor();
+	timer_initMotorAsGpio();
+	ledswi_initLedSwitch(4,0);
+//	adc_initADCModule();
 //	timer_initHeater();
 //	lcd_initLcd();
 //	buzzer_init();
@@ -192,11 +198,11 @@ int main(void)
 
 	/* initiate first adc conversion */
 	//adc_initConvertion();
-	adc_initConvertion2(0);
+//	adc_initConvertion2(0);
 
 //	main_initOutputLeds();
 
-	ledswi_initLedSwitch(4,0);
+//	ledswi_initLedSwitch(4,0);
 
 	/* set cooler fan PWM to 100% for reference setting */
 //	timer_setFanDutyCycle(100);
@@ -204,9 +210,13 @@ int main(void)
 	/* initialize PID struct */
 //	pid_PidInitialize(&pdtContrData);
 
-	timer_changeMotor1Pwm(50);
-	timer_changeMotor2Pwm(50);
-
+//	timer_changeMotor1Pwm(50);
+//	timer_changeMotor2Pwm(50);
+//	timer_motorDisable();
+	timer_MotorGpioEnable();
+	ledswi_setLed(3);
+	ledswi_setLed(4);
+//
 
 	/* cooperative cyclic executive main loop */
     for (;;) {
@@ -214,42 +224,42 @@ int main(void)
 //    	ledswi_setLed(4);
 
 
-    	if(adc_isAdcDone())
-    	{
-    		iSensor[i] = adc_read2();
-    		i++;
-    		if(i>1)
-    			i=0;
-    		adc_initConvertion2(i);
-    	}
-
-//     	int iSensor1 = adc_getValue(1);
-    	int iLedVal1 = iSensor[0]>ref;
-//    	main_OuputLeds_setVal(1,(iLedVal1));
-    	if(iLedVal1)
-    		ledswi_setLed(3);
-    	else
-    		ledswi_clearLed(3);
-
-//    	int iSensor2 = adc_getValue(2);
-    	int iLedVal2 = iSensor[1]>ref;
-
-    	if(iLedVal2)
-			ledswi_setLed(4);
-		else
-			ledswi_clearLed(4);
-//		main_OuputLeds_setVal(2,(iLedVal2));
-
-//		int iSensor3 = adc_getValue(3);
-		int iLedVal3 = iSensor[2]>ref;
-//		main_OuputLeds_setVal(3,(iLedVal3));
-
-//		int iSensor4 = adc_getValue(4);
-		int iLedVal4 = iSensor[3]>ref;
-//		main_OuputLeds_setVal(4,(iLedVal4));
-
-//		int iSensor5 = adc_getValue(5);
-		int iLedVal5 = iSensor[4]>ref;
+//    	if(adc_isAdcDone())
+//    	{
+//    		iSensor[i] = adc_read2();
+//    		i++;
+//    		if(i>1)
+//    			i=0;
+//    		adc_initConvertion2(i);
+//    	}
+//
+////     	int iSensor1 = adc_getValue(1);
+//    	int iLedVal1 = iSensor[0]>ref;
+////    	main_OuputLeds_setVal(1,(iLedVal1));
+//    	if(iLedVal1)
+//    		ledswi_setLed(3);
+//    	else
+//    		ledswi_clearLed(3);
+//
+////    	int iSensor2 = adc_getValue(2);
+//    	int iLedVal2 = iSensor[1]>ref;
+//
+//    	if(iLedVal2)
+//			ledswi_setLed(4);
+//		else
+//			ledswi_clearLed(4);
+////		main_OuputLeds_setVal(2,(iLedVal2));
+//
+////		int iSensor3 = adc_getValue(3);
+//		int iLedVal3 = iSensor[2]>ref;
+////		main_OuputLeds_setVal(3,(iLedVal3));
+//
+////		int iSensor4 = adc_getValue(4);
+//		int iLedVal4 = iSensor[3]>ref;
+////		main_OuputLeds_setVal(4,(iLedVal4));
+//
+////		int iSensor5 = adc_getValue(5);
+//		int iLedVal5 = iSensor[4]>ref;
 //		main_OuputLeds_setVal(5,(iLedVal5));
 
 
@@ -333,12 +343,12 @@ int main(void)
 //    	uiFunctions_computeAndSendTemp(&iAdcValue,&iTemp,CYCLIC_EXECUTIVE_PERIOD);
 
 		/* WAIT FOR CYCLIC EXECUTIVE PERIOD */
-//		while(!uiFlagNextPeriod);
-//		uiFlagNextPeriod = 0;
-//		j++;
-
-		for(j=0;j<50;j++)
-			util_genDelay10ms();
+		while(!uiFlagNextPeriod);
+		uiFlagNextPeriod = 0;
+		x = encoder_getSpeed1(CYCLIC_EXECUTIVE_PERIOD);
+		y = encoder_getSpeed2(CYCLIC_EXECUTIVE_PERIOD);
+//		for(j=0;j<50;j++)
+//			util_genDelay10ms();
     }
     /* Never leave main */
     return 0;

@@ -55,5 +55,8 @@ void timer_initTPM1AsPWM(void);
 void timer_initMotor(void);
 void timer_changeMotor1Pwm(int iPwm);
 void timer_changeMotor2Pwm(int iPwm);
+void timer_initMotorAsGpio(void);
+void timer_MotorGpioEnable(void);
+void timer_MotorGpioDisable(void);
 
 #endif /* UTIL_TIMER_COUNTER_H */
