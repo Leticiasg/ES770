@@ -26,13 +26,16 @@ void timer_initTPM1AsPWM(void)
 	SIM_SCGC6 |= SIM_SCGC6_TPM1(CGC_CLOCK_ENABLED);
 
 	/* TPM1 as PWM up counting mode */
-	TPM1_SC |= TPM_SC_CPWMS(TPM_SC_CPWMS_UPCNT);
+//	TPM1_SC |= TPM_SC_CPWMS(TPM_SC_CPWMS_UPCNT);
 	
 	/* LPTPM Counter increments on every LPTPM counter clock */
-	TPM1_SC |= TPM_SC_CMOD(TPM_SC_CMOD_EVRCNTCLK);
+//	TPM1_SC |= TPM_SC_CMOD(TPM_SC_CMOD_EVRCNTCLK);
 	
+	SIM_SOPT2 |= SIM_SOPT2_TPMSRC(SIM_SOPT2_TPMSRC_OSCERCCLK);
+
 	/* Prescale 1:1 */
-	TPM1_SC |= TPM_SC_PS(TPM_SC_PS_1);   
+//	TPM1_SC |= TPM_SC_PS(TPM_SC_PS_1);
+	TPM1_SC |= TPM_SC_CPWMS(TPM_SC_CPWMS_UPCNT) | TPM_SC_CMOD(TPM_SC_CMOD_EVRCNTCLK) | TPM_SC_CMOD(TPM_SC_CMOD_EVRCNTCLK);
 
 	/* TPM1 as PWM Edge Aligned */
 	TPM1_C1SC |= TPM_CnSC_MSB(TPM_CNSC_MSB_PWM) | TPM_CnSC_MSA(TPM_CNSC_MSA_PWM) | TPM_CnSC_ELSB(TPM_CNSC_ELSB_PWM) | TPM_CnSC_ELSA(TPM_CNSC_ELSA_PWM);
@@ -134,8 +137,8 @@ void timer_initMotorAsGpio(void)
 
 	 SIM_SCGC5 |= SIM_SCGC5_PORTA(CGC_CLOCK_ENABLED);
 
-	 PORTA_PCR29 = PORT_PCR_MUX(MOTOR_GPIO_ALT);
-	 PORTA_PCR30 = PORT_PCR_MUX(MOTOR_GPIO_ALT);
+	 PORTA_PCR12 |= PORT_PCR_MUX(MOTOR_GPIO_ALT);
+	 PORTA_PCR13 |= PORT_PCR_MUX(MOTOR_GPIO_ALT);
 
 	 GPIOA_PDDR |= GPIO_PDDR_PDD(MOTOR1_DIR | MOTOR2_DIR);
 
@@ -164,7 +167,7 @@ void timer_changeMotor1Pwm(int iPwm)
 		iPwm = 0;
 	}
 	iPwm = (unsigned int) (((float) iPwm/100)*MOTOR_COUNT);
-	TPM1_C0V = iPwm;
+	TPM1_C0V = TPM_CnV_VAL(iPwm);
 }
 
 void timer_changeMotor2Pwm(int iPwm)
@@ -178,6 +181,6 @@ void timer_changeMotor2Pwm(int iPwm)
 		iPwm = 0;
 	}
 	iPwm = (unsigned int) (((float) iPwm/100)*MOTOR_COUNT);
-	TPM1_C1V = iPwm;
+	TPM1_C1V = TPM_CnV_VAL(iPwm);
 }
 

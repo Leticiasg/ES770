@@ -50,11 +50,17 @@ void adc_initADCModule(void)
    SIM_SCGC6 |= SIM_SCGC6_ADC0(CGC_CLOCK_ENABLED);	//Enable clock for ADC
 
    /* un-gate port clock*/
-   SIM_SCGC5 |= SIM_SCGC5_PORTE(CGC_CLOCK_ENABLED);
+   SIM_SCGC5 |= SIM_SCGC5_PORTB(CGC_CLOCK_ENABLED);
+   SIM_SCGC5 |= SIM_SCGC5_PORTC(CGC_CLOCK_ENABLED);
 
    /* set pin as ADC In */
-   PORTE_PCR20 |= PORT_PCR_MUX(VOLTSENSOR_ADC_ALT);   //Voltage Sensor
-   PORTE_PCR21 |= PORT_PCR_MUX(TEMPSENSOR_ADC_ALT);   //Temperature Sensor
+//   PORTE_PCR20 |= PORT_PCR_MUX(VOLTSENSOR_ADC_ALT);   //Voltage Sensor
+//   PORTE_PCR21 |= PORT_PCR_MUX(TEMPSENSOR_ADC_ALT);   //Temperature Sensor
+   PORTB_PCR0|= PORT_PCR_MUX(ALT0);
+   PORTB_PCR1|= PORT_PCR_MUX(ALT0);
+   PORTB_PCR2|= PORT_PCR_MUX(ALT0);
+   PORTB_PCR3|= PORT_PCR_MUX(ALT0);
+   PORTC_PCR0|= PORT_PCR_MUX(ALT0);
 
    /* configure ADC with short sample time configuration, clock Divide = 1, Normal power */
    ADC0_CFG1 |= (ADC_CFG1_ADICLK(ADC_CFG1_ADICLK_BUS2) |
@@ -158,7 +164,10 @@ uint16_t adc_read(uint16_t ch)
 
 void adc_initConvertion2(uint16_t ch)
 {
-	ADC0_SC1A = iTabelaAdc[ch] & ADC_SC1_ADCH_MASK;
+	int tab = iTabelaAdc[ch];
+	ADC0_SC1A &= (ADC_SC1_ADCH(tab) |
+			   ADC_SC1_DIFF(ADC_SC1_DIFF_SINGLEENDED) |
+			   ADC_SC1_AIEN(ADC_SC1_AIEN_DISABLE));
 }
 
 uint16_t adc_read2(void)

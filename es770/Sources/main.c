@@ -176,21 +176,24 @@ int main(void)
 	int iSensor[5] = {0,0,0,0,0};
 
 	int i = 0;
+	int j = 0;
 
 	int x = 0;
 	int y = 0;
 
 	/* initialization functions */
 	mcg_clockInit();
-	encoder_init();
+	//encoder_init();
 
-//	timer_initTPM1AsPWM();
+	timer_initTPM1AsPWM();
+	timer_initMotor();
 //	timer_coolerfan_init();
 //	tacometer_init();
 	debugUart_init();
 	timer_initMotorAsGpio();
 	ledswi_initLedSwitch(4,0);
-//	adc_initADCModule();
+	adc_initADCModule();
+//	adc_init(8);
 //	timer_initHeater();
 //	lcd_initLcd();
 //	buzzer_init();
@@ -198,7 +201,7 @@ int main(void)
 
 	/* initiate first adc conversion */
 	//adc_initConvertion();
-//	adc_initConvertion2(0);
+	adc_initConvertion2(0);
 
 //	main_initOutputLeds();
 
@@ -210,12 +213,14 @@ int main(void)
 	/* initialize PID struct */
 //	pid_PidInitialize(&pdtContrData);
 
-//	timer_changeMotor1Pwm(50);
-//	timer_changeMotor2Pwm(50);
+	timer_changeMotor1Pwm(50);
+	timer_changeMotor2Pwm(50);
+	TPM1_C0V = 0x100;
+//	x = TPM0_CNT;
 //	timer_motorDisable();
-	timer_MotorGpioEnable();
-	ledswi_setLed(3);
-	ledswi_setLed(4);
+//	timer_MotorGpioEnable();
+//	ledswi_setLed(3);
+//	ledswi_setLed(4);
 //
 
 	/* cooperative cyclic executive main loop */
@@ -226,11 +231,11 @@ int main(void)
 
 //    	if(adc_isAdcDone())
 //    	{
-//    		iSensor[i] = adc_read2();
-//    		i++;
-//    		if(i>1)
-//    			i=0;
-//    		adc_initConvertion2(i);
+    		iSensor[i] = adc_read2();
+    		i++;
+    		if(i>4)
+    			i=0;
+    		adc_initConvertion2(i);
 //    	}
 //
 ////     	int iSensor1 = adc_getValue(1);
@@ -345,8 +350,9 @@ int main(void)
 		/* WAIT FOR CYCLIC EXECUTIVE PERIOD */
 		while(!uiFlagNextPeriod);
 		uiFlagNextPeriod = 0;
-		x = encoder_getSpeed1(CYCLIC_EXECUTIVE_PERIOD);
-		y = encoder_getSpeed2(CYCLIC_EXECUTIVE_PERIOD);
+		j++;
+		//x = encoder_getSpeed1(CYCLIC_EXECUTIVE_PERIOD);
+		//y = encoder_getSpeed2(CYCLIC_EXECUTIVE_PERIOD);
 //		for(j=0;j<50;j++)
 //			util_genDelay10ms();
     }
