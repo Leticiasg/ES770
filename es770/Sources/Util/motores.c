@@ -1,12 +1,18 @@
 #include "KL25Z/es670_peripheral_board.h"
-#include "Timer/timer_counter.h"
+#include "timer_counter.h"
 #include "MKL25Z4.h"
 #include "motores.h"
+
+#define DA_DIR_OUTPUT 0x1 << 0
+#define DB_DIR_OUTPUT 0x1 << 1
+#define DC_DIR_OUTPUT 0x1 << 2
+#define DD_DIR_OUTPUT 0x1 << 3
+
 
 /* A função inicializa o TPM_1 para ser utilizado como pwm para os dois motores, o valor de idutyCycle recebe o
  *valor inicial do pwm.
  *Essa função utiliza as portas PTA12 e PTA13 para os 2 pwm */
-void pwm_init(double idutyCycle)
+void pwm_init(double idutyCycle1,double idutyCycle2)
 {
 	/* un-gate port clock*/
 	SIM_SCGC6 |= SIM_SCGC6_TPM1(CGC_CLOCK_ENABLED); //Enable clock for TPM1
@@ -33,9 +39,13 @@ void pwm_init(double idutyCycle)
 	TPM1_C0SC |= (TPM_CnSC_MSB(0b1) | TPM_CnSC_MSA(0b0) | TPM_CnSC_ELSB(0b1) | TPM_CnSC_ELSA(0b0));
 
 	/*Seta o pwm inicial*/
-	idutyCycle = ((idutyCycle)*(TPM1_MOD+1))/100;
-	TPM1_C0V = (int)idutyCycle;
-	TPM1_C1V = (int)idutyCycle;
+	idutyCycle1 = ((idutyCycle1)*(TPM1_MOD+1))/100;
+	idutyCycle2 = ((idutyCycle2)*(TPM1_MOD+1))/100;
+	TPM1_C0V = (int)idutyCycle1*(idutyCycle1>0);
+	TPM1_C1V = (int)idutyCycle2*(idutyCycle2>0);
+
+//	TPM1_C0V = (int)0x10;
+//	TPM1_C1V = (int)0x10;
 
 	/* un-gate port clock*/
 	SIM_SCGC5 |= SIM_SCGC5_PORTA(CGC_CLOCK_ENABLED);
@@ -59,22 +69,22 @@ void seta_pwm(int motor, double idutyCycle)
 		TPM1_C0V = (int)idutyCycle;
 	}
 }
-
-
-/*Inicializa saidas de controle de direção para os motores*/
+//
+//
+///*Inicializa saidas de controle de direção para os motores*/
 void motor_init()
 {
 	/*inicializa os pwm sempre em 75%*/
-	pwm_init(0);
+	pwm_init(20,30);
 
 	/*Liberar o clock para o PORT C*/
 	SIM_SCGC5 |= SIM_SCGC5_PORTC(CGC_CLOCK_ENABLED);
 
 	/*Vamos usar PTC0, PTC1, PTC2 e PTC3*/
-	PORTC_PCR0 = PORT_PCR_MUX(DA_ALT);
-	PORTC_PCR1 = PORT_PCR_MUX(DB_ALT);
-	PORTC_PCR2 = PORT_PCR_MUX(DC_ALT);
-	PORTC_PCR3 = PORT_PCR_MUX(DD_ALT);
+	PORTC_PCR0 = PORT_PCR_MUX(0x1);
+	PORTC_PCR1 = PORT_PCR_MUX(0x1);
+	PORTC_PCR2 = PORT_PCR_MUX(0x1);
+	PORTC_PCR3 = PORT_PCR_MUX(0x1);
 
 	/*Escolhea a direção dos pinos*/
 	GPIOC_PDDR |= GPIO_PDDR_PDD(DA_DIR_OUTPUT | DB_DIR_OUTPUT | DC_DIR_OUTPUT | DD_DIR_OUTPUT);
@@ -133,6 +143,6 @@ void seta_motor(int motor, int direcao, int idutyCycle)
 
 	seta_pwm(motor, idutyCycle);
 }
-
-
+//
+//
 

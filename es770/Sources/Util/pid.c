@@ -17,9 +17,9 @@
 /* ****************************************************** */
 void pid_PidInitialize(PID_DATA* pdtPidData)
 {
-	pdtPidData->dKp = 1.0;
-	pdtPidData->dKi = 1.0;
-	pdtPidData->dKd = 1.0;
+	pdtPidData->dKp = 1;
+	pdtPidData->dKi = 0.0;
+	pdtPidData->dKd = 0.0;
 	pdtPidData->dSensorVal = 0.0;
 	pdtPidData->dErrorSum = 0.0;
 }
