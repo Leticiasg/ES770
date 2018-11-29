@@ -19,28 +19,27 @@
 #include "fsl_device_registers.h"
 
 /* our includes */
-#include "Util/adc.h"
-#include "Util/pid.h"
-#include "Util/util.h"
 #include "Util/debugUart.h"
 #include "Util/tc_hal.h"
 #include "Util/timer_counter.h"
+#include "Util/adc.h"
+#include "Util/pid.h"
 #include "mcg_hal.h"
-#include "Encoder/encoder_hal.h"
-#include "Serial/serial_hal.h"
 #include "KL25Z/es670_peripheral_board.h"
-//#include "Protocolo/cmdmachine_hal.h"
-#include "LedSwi/ledswi_hal.h"
-#include <stdio.h>
 
 /* defines */
 
+#define PORT_PCR_MUX_CLR_MASK	!(PORT_PCR_MUX_MASK)
+#define BLACK_VALUE 			5					// valor normalizado do sensor abaixo do qual se considera como leitura do fundo preto
+#define MOTOR1_STRAIGHT 		30  				// PWM de reta do motor esquerdo
+#define MOTOR2_STRAIGHT 		60 					// PWM de reta do motor direito
+#define SENSOR_MAX 				0xd3				// maior valor dos sensores da pre-calibracao
+#define NUMBER_OF_CROSSINGS		2					// numero de cruzamentos da linha de chegada a contar
+#define MAX_WHITE_TIME			20					// tempo de captacao da linha de chegada / tempo do ECC
+
  /* in micro seconds = mili seconds * 1000 */
-/* recommend value for operating control */
-#define CYCLIC_EXECUTIVE_PERIOD    300*1000
-
-#define MAXSPEED_STABLE_TIME 6000 /* aprox. time to stabilization in miliseconds */
-
+#define CYCLIC_EXECUTIVE_PERIOD    5*1000
+#define START_DELAY					150
 
 /* globals */
 
@@ -60,301 +59,229 @@ void main_cyclicExecuteIsr(void)
     uiFlagNextPeriod = 1;
 }
 
-//void main_initOutputLeds(void)
-//{
-//	 SIM_SCGC5 |= SIM_SCGC5_PORTE(CGC_CLOCK_ENABLED);
-//	 SIM_SCGC5 |= SIM_SCGC5_PORTB(CGC_CLOCK_ENABLED);
-//
-//	 GPIOE_PDDR |= GPIO_PDDR_PDD(OUTPUT_LED_PIN1_DIR | OUTPUT_LED_PIN2_DIR | OUTPUT_LED_PIN3_DIR | OUTPUT_LED_PIN4_DIR);
-//	 GPIOB_PDDR |= GPIO_PDDR_PDD(OUTPUT_LED_PIN5_DIR);
-//}
-//
-//void main_OuputLeds_setVal(char cLedNum,int iVal)
-//{
-//
-//        switch(cLedNum)
-//        {
-//            case 1:
-//                if(iVal)
-//                	GPIOE_PSOR = GPIO_PSOR_PTSO( (0x01U << OUTPUT_LED_PIN1) );
-//                else
-//                	GPIOE_PCOR = GPIO_PCOR_PTCO( (0x01U << OUTPUT_LED_PIN1) );
-//                break;
-//            case 2:
-//            	if(iVal)
-//					GPIOE_PSOR = GPIO_PSOR_PTSO( (0x01U << OUTPUT_LED_PIN2) );
-//				else
-//					GPIOE_PCOR = GPIO_PCOR_PTCO( (0x01U << OUTPUT_LED_PIN2) );
-//				break;
-//            case 3:
-//            	if(iVal)
-//					GPIOE_PSOR = GPIO_PSOR_PTSO( (0x01U << OUTPUT_LED_PIN3) );
-//				else
-//					GPIOE_PCOR = GPIO_PCOR_PTCO( (0x01U << OUTPUT_LED_PIN3) );
-//				break;
-//            case 4:
-//            	if(iVal)
-//					GPIOE_PSOR = GPIO_PSOR_PTSO( (0x01U << OUTPUT_LED_PIN4) );
-//				else
-//					GPIOE_PCOR = GPIO_PCOR_PTCO( (0x01U << OUTPUT_LED_PIN4) );
-//				break;
-//            case 5:
-//            	if(iVal)
-//					GPIOB_PSOR = GPIO_PSOR_PTSO( (0x01U << OUTPUT_LED_PIN5) );
-//				else
-//					GPIOB_PCOR = GPIO_PCOR_PTCO( (0x01U << OUTPUT_LED_PIN5) );
-//				break;
-//        } /* switch(cLedNum) */
-//
-//}
+/* funcao para desabilitar o pino de interrupcao nao mascaravel padrao */
+void main_disablePinNmi(void)
+{
+	SIM_SCGC5 |= SIM_SCGC5_PORTA(CGC_CLOCK_ENABLED);
+
+	PORTA_PCR4 &= PORT_PCR_MUX_CLR_MASK;
+}
 
 int main(void)
 {
-	/* local variable declarations */
-
-	/* cooler fan duty cycle*/
-//	static int iFanDcycle = 0;
-//
-//	/* led status vector, indicating if led in position is on or off*/
-//	static led_status_type_e lstvLedSt[] = {LED_OFF,LED_OFF,LED_OFF,LED_OFF};
-//
-//	/* character received on serial */
-//	unsigned int uiReceiveBuff = 0;
-//
-//	/* interpreted command from serial */
-//	static char cvInterpMsg[6] = {0,0,0,0,0,0};
-//
-//	/* buzzer action time (in miliseconds) */
-//	static int iBuzTime = 0;
-//
-//	/* ADC conversion value */
-//	int iAdcValue = 0;
-//
-//	/* measured temperature */
-//	int iTemp = 0;
-//
-//	/* cooler speed measured by tacometer */
-//	int iTacoSpeed = 0;
-//
-//	/* cooler fan measured max speed in RPS */
-//	int iMaxSpeed = 0;
-//
-//	/* cooler fan reference speed in RPS */
-//	int iRefSpeed = 0;
-//
-//	/* heater duty cycle (in percentage) */
-//	static int iHeaterDcycle = 0;
-
-	/* PID controller data struct */
-//	PID_DATA pdtContrData;
-
-	/* PID out value */
-//	double dPidOut = 0;
-//
-//	/* PID Kp constant */
-//	int iKp;
-//
-//	/* PID Ki constant */
-//	int iKi;
-//
-//	/* PID Kd constant */
-//	int iKd;
-//
-//	/* PID out converted to PWM*/
-//	int iPwm = 0;
-//
-//	/* first line of LCD message */
-//	char cvLcdMsg1[16] = "                ";
-//
-//	/* second line of LCD message */
-//	char cvLcdMsg2[16] = "                ";
-//
-//	int iCnt = 0;
-
-	int ref = 0x5;
-
-	int iSensor[5] = {0,0,0,0,0};
-
+	/* variavel para contagem da ordem dos sensores */
 	int i = 0;
+
+	/* variavel para contagem de ciclos rodados */
 	int j = 0;
 
-	int x = 0;
-	int y = 0;
+	int k = 0;
+
+	/* variavel para contagem de tempo sobre linha de chegada */
+	int iWhiteTime = 0;
+
+	/* vetor de leitura bruta dos sensores */
+	int iSensor[5] = {0,0,0,0,0};
+
+	/* vetor de maximo dos sensores */
+	int iSensorMax[5] = {SENSOR_MAX,SENSOR_MAX,SENSOR_MAX,SENSOR_MAX,SENSOR_MAX};
+
+	/* vetor de leitura normalizada (pelo maximo proprio) dos sensores */
+	int iNormSensor[5] = {0,0,0,0,0};
+
+	/* vetor de leitura binaria (1=branco,0=preto) dos sensores */
+	int iBoolSensor[5] = {0,0,0,0,0};
+
+	/* flag que indica se a primeira calibracao dos sensores esta em curso */
+	int iGetMaxVal = 1;
+
+	/* valor ponderado para definicao da posicao na linha (inteiro) */
+	int iLineVal = 0;
+
+	/* valor ponderado da linha a esquerda */
+	int iLeftVal = 0;
+
+	/* valor ponderado da linha a direita */
+	int iRightVal = 0;
+
+	/* pwm a ser imposto ao motor esquerdo */
+	int iPwm1 = MOTOR1_STRAIGHT;
+
+	/* pwm a ser imposto ao motor direito */
+	int iPwm2 = MOTOR2_STRAIGHT;
+
+
+	/* flag que indica se o estado anterior dos sensores era todos lendo branco */
+	int iWasAllWhite = 1;
+
+	/* variavel para contagem de cruzamentos da linha de chegada */
+	int iCrossingsCounter = 0;
+
+	/* flag para indicar se o carrinho deve estar continuar andando (=1) ou parar (=0) */
+	int iRun = 1;
+
+	/* valor ponderado para definicao da posicao na linha (inteiro) */
+	double dLineVal = 0.0;
+
+	/* variavel para saida do controlador PID */
+	double dControl = 0.0;
+
+	/* variavel para salvar ultimo valor de saida do controlador */
+	double dLastControl = 0.0;
+
+	/* struct que contem a configuracao e estado do controlador */
+	PID_DATA pidStr;
 
 	/* initialization functions */
 	mcg_clockInit();
-	//encoder_init();
-
-	timer_initTPM1AsPWM();
-	timer_initMotor();
-//	timer_coolerfan_init();
-//	tacometer_init();
-	debugUart_init();
-	timer_initMotorAsGpio();
-	ledswi_initLedSwitch(4,0);
+	main_disablePinNmi();
 	adc_initADCModule();
-//	adc_init(8);
-//	timer_initHeater();
-//	lcd_initLcd();
-//	buzzer_init();
+	adc_initConvertion2(i);
+	pid_PidInitialize(&pidStr);
+	timer_initMotor();
+
+	/* functions before loop */
 	tc_installLptmr0(CYCLIC_EXECUTIVE_PERIOD, main_cyclicExecuteIsr);
 
-	/* initiate first adc conversion */
-	//adc_initConvertion();
-	adc_initConvertion2(0);
-
-//	main_initOutputLeds();
-
-//	ledswi_initLedSwitch(4,0);
-
-	/* set cooler fan PWM to 100% for reference setting */
-//	timer_setFanDutyCycle(100);
-
-	/* initialize PID struct */
-//	pid_PidInitialize(&pdtContrData);
-
-	timer_changeMotor1Pwm(50);
-	timer_changeMotor2Pwm(50);
-	TPM1_C0V = 0x100;
-//	x = TPM0_CNT;
-//	timer_motorDisable();
-//	timer_MotorGpioEnable();
-//	ledswi_setLed(3);
-//	ledswi_setLed(4);
-//
-
 	/* cooperative cyclic executive main loop */
-    for (;;) {
+    for (;;)
+	{
 
-//    	ledswi_setLed(4);
-
-
-//    	if(adc_isAdcDone())
-//    	{
+		/* Se a leitura do sensor atual foi concluida*/
+    	if(adc_isAdcDone())
+		{
+			/* salva o valor lido no vetor */
     		iSensor[i] = adc_read2();
-    		i++;
-    		if(i>4)
-    			i=0;
-    		adc_initConvertion2(i);
-//    	}
-//
-////     	int iSensor1 = adc_getValue(1);
-//    	int iLedVal1 = iSensor[0]>ref;
-////    	main_OuputLeds_setVal(1,(iLedVal1));
-//    	if(iLedVal1)
-//    		ledswi_setLed(3);
-//    	else
-//    		ledswi_clearLed(3);
-//
-////    	int iSensor2 = adc_getValue(2);
-//    	int iLedVal2 = iSensor[1]>ref;
-//
-//    	if(iLedVal2)
-//			ledswi_setLed(4);
-//		else
-//			ledswi_clearLed(4);
-////		main_OuputLeds_setVal(2,(iLedVal2));
-//
-////		int iSensor3 = adc_getValue(3);
-//		int iLedVal3 = iSensor[2]>ref;
-////		main_OuputLeds_setVal(3,(iLedVal3));
-//
-////		int iSensor4 = adc_getValue(4);
-//		int iLedVal4 = iSensor[3]>ref;
-////		main_OuputLeds_setVal(4,(iLedVal4));
-//
-////		int iSensor5 = adc_getValue(5);
-//		int iLedVal5 = iSensor[4]>ref;
-//		main_OuputLeds_setVal(5,(iLedVal5));
+
+			/*, normaliza seu valor e atualiza o valor de maximo desse caso seja maior que o salvo */
+			if(iSensor[i] > iSensorMax[i])
+				iSensorMax[i] = iSensor[i];
+			iNormSensor[i] = adc_normalizeReadValue10(iSensor[i],iSensorMax[i]);
+			iBoolSensor[i] = (iNormSensor[i]>BLACK_VALUE);
+
+			i++;
+			if(i>4)
+			{
+				i=0;
+
+				/* apos ler uma vez todos os sensores, a flag e zerada */
+				iGetMaxVal = 0;
+			}
+
+			/* inicia a conversao do proximo sensor */
+			adc_initConvertion2(i);
+		}
 
 
-//    	printf("%d %d %d %d %d\n",iSensor1,iSensor2,iSensor3,iSensor4,iSensor5);
+    	/* Faz a ponderacao para definicao do valor da linha, que deve ser zero se estiver centralizado e aumentar
+    	 * gradativamente conforme a leitura for feita nos sensores mais externos */
+		iLeftVal = 3*(iBoolSensor[4] & !iBoolSensor[3]) + (iBoolSensor[4] & iBoolSensor[3])
+				+ 2*(!iBoolSensor[4] & iBoolSensor[3]);
+		iRightVal = 3*(iBoolSensor[0] & !iBoolSensor[1]) + (iBoolSensor[0] & iBoolSensor[1])
+						+ 2*(!iBoolSensor[0] & iBoolSensor[1]);
+		iLineVal = iLeftVal - iRightVal;
+		dLineVal = (double)iLineVal;
 
-//    	/* CCE functions here */
-//
-//    	/* check if buffer has character */
-//		uiReceiveBuff = serial_receiveBuffer();
-//		if(0 != uiReceiveBuff)
-//		{
-//			cmdmachine_interpretCmd(uiReceiveBuff,cvInterpMsg);
-//		}
-//
-//		if(NONE_MSG != cvInterpMsg[0])
-//		{
-//			/* send response to host and execute commands */
-//			cmdmachine_retCmdReponse(cvInterpMsg,lstvLedSt,&iBuzTime,&iFanDcycle,&iHeaterDcycle,&iRefSpeed,&pdtContrData);
-//		}
-//
-//		/* set heater duty cycle */
-//		timer_changeHeaterPwm(iHeaterDcycle);
-//
-//		/* control cooler fan speed */
-//
-//		/* get fan speed */
-//		iTacoSpeed = tacometer_getSpeed(CYCLIC_EXECUTIVE_PERIOD);
-//
-//		/* if stabilization time is out control speed, else get max speed */
-//		if(MAXSPEED_STABLE_TIME <= iCnt*CYCLIC_EXECUTIVE_PERIOD/1000)
-//		{
-//			/* max speed limiter */
-//			if(iRefSpeed > iMaxSpeed)
-//			{
-//				iRefSpeed = iMaxSpeed;
-//			}
-//
-//			/* generate control signal */
-//			iPwm = (int)pid_PidUpdate(&pdtContrData,iTacoSpeed,iRefSpeed);
-//
-//			/* duty cycle limiter */
-//			if(iPwm > 100)
-//			{
-//				iPwm = 100;
-//			}
-//			else if(iPwm < 0)
-//			{
-//				iPwm = 0;
-//			}
-//
-//			/* set duty cycle using control signal */
-//			timer_setFanDutyCycle(iPwm);
-//		}
-//		else
-//		{
-//			iCnt++;
-//			iMaxSpeed = iTacoSpeed;
-//		}
-//
-//
-//		/* output led status */
-//		uiFunctions_writeLeds(lstvLedSt);
-//
-//
-//		/* truncate control constants for writing on LCD */
-//		iKp = (int)pdtContrData.dKp;
-//		iKi = (int)pdtContrData.dKi;
-//		iKd = (int)pdtContrData.dKd;
-//
-//		/* Row 1: control constants */
-//		sprintf(cvLcdMsg2,"P:%2d I:%2d D:%2d",iKp,iKi,iKd);
-//
-//		/* Row 2: Current duty cycle (in percentage), current speed (in RPS), reference speed (in RPS) */
-//		sprintf(cvLcdMsg1,"PWM%3d V%2d S%2d",iPwm,iTacoSpeed,iRefSpeed);
-//		lcd_writeBothRows(cvLcdMsg1,cvLcdMsg2);
-//
-//		/* output buzzer */
-//    	uiFunctions_setBuzTime(&iBuzTime,CYCLIC_EXECUTIVE_PERIOD);
-//
-//    	/* convert and send temperature to host by serial */
-//    	uiFunctions_computeAndSendTemp(&iAdcValue,&iTemp,CYCLIC_EXECUTIVE_PERIOD);
+		/* gera a saida de controle, tomando como referencia o valor da linha como 0 */
+		dControl = pid_PidUpdate(&pidStr,dLineVal,0.0);
 
-		/* WAIT FOR CYCLIC EXECUTIVE PERIOD */
+		/* se o carrinho deve prosseguir */
+		if(iRun)
+		{
+			if(iBoolSensor[2])
+			{
+
+				/* Se uma linha perpendicular branca for lida por tempo sufuciente (indicando a faixa de chegada),
+				 * conta uma volta */
+				if(iBoolSensor[0] && iBoolSensor[1] && iBoolSensor[2] &&
+						iBoolSensor[3] && iBoolSensor[4])
+				{
+					iWhiteTime++;
+					if(!iWasAllWhite && (iWhiteTime>MAX_WHITE_TIME))
+					{
+						iWasAllWhite = 1;
+						iCrossingsCounter++;
+					}
+				}
+				else
+				{
+					iWasAllWhite = 0;
+				}
+
+				/* Se duas voltas forem contadas, o carrinho deve parar no ciclo seguinte */
+				if(iCrossingsCounter>=NUMBER_OF_CROSSINGS)
+				{
+					timer_initTPM1AsPWM(0,0);
+					iRun = 0;
+				}
+
+				/* Se o sensor do meio indicar a linha e nao estiver parado, deve seguir reto */
+				else
+				{
+					timer_initTPM1AsPWM(MOTOR1_STRAIGHT,MOTOR2_STRAIGHT);
+					iPwm1 = 0;
+					iPwm2 = 0;
+				}
+			}
+
+			/* Se o carrinho nao estiver centralizado, o controle deve operar para corrigir sua posicao.
+			 * E dado um tempo inicial de leitura para nao haver problemas com leitura incompleta do vetor de sensores */
+			else if(j>=START_DELAY && !iGetMaxVal && (iBoolSensor[0]) ||
+					(iBoolSensor[1]) ||
+					(iBoolSensor[3]) ||
+					(iBoolSensor[4]))
+			{
+				iWasAllWhite = 0;
+				iWhiteTime = 0;
+				if(dControl<0)
+				{
+					iPwm1 = (int)(MOTOR1_STRAIGHT+dControl);
+					iPwm2 = (int)(MOTOR2_STRAIGHT);
+					dLastControl = dControl;
+				}
+				else
+				{
+					iPwm1 = (int)(MOTOR1_STRAIGHT+dControl);
+					iPwm2 = (int)(MOTOR2_STRAIGHT-2*dControl);
+					dLastControl = dControl;
+				}
+				timer_initTPM1AsPWM(iPwm1,iPwm2);
+			}
+			else
+			{
+				iWasAllWhite = 0;
+				iWhiteTime = 0;
+				if(dLastControl<0)
+				{
+					iPwm1 = (int)(MOTOR1_STRAIGHT+dLastControl);
+					iPwm2 = (int)(MOTOR2_STRAIGHT);
+				}
+				else if(dLastControl>0)
+				{
+					iPwm1 = (int)(MOTOR1_STRAIGHT+dLastControl);
+					iPwm2 = (int)(MOTOR2_STRAIGHT-2*dLastControl);
+				}
+				else
+				{
+					timer_initTPM1AsPWM(0,0);
+				}
+				timer_initTPM1AsPWM(iPwm1,iPwm2);
+			}
+		}
+
+		/* Se as voltas foram completadas, o carrinho deve parar */
+		else
+		{
+			timer_initTPM1AsPWM(0,0);
+			return 0;
+		}
+
+
+    	/* WAIT FOR CYCLIC EXECUTIVE PERIOD */
 		while(!uiFlagNextPeriod);
 		uiFlagNextPeriod = 0;
 		j++;
-		//x = encoder_getSpeed1(CYCLIC_EXECUTIVE_PERIOD);
-		//y = encoder_getSpeed2(CYCLIC_EXECUTIVE_PERIOD);
-//		for(j=0;j<50;j++)
-//			util_genDelay10ms();
+
     }
     /* Never leave main */
     return 0;

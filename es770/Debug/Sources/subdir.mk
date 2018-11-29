@@ -6,20 +6,17 @@
 C_SRCS += \
 ../Sources/fsl_debug_console.c \
 ../Sources/main.c \
-../Sources/mcg_hal.c \
-../Sources/print_scan.c 
+../Sources/mcg_hal.c 
 
 OBJS += \
 ./Sources/fsl_debug_console.o \
 ./Sources/main.o \
-./Sources/mcg_hal.o \
-./Sources/print_scan.o 
+./Sources/mcg_hal.o 
 
 C_DEPS += \
 ./Sources/fsl_debug_console.d \
 ./Sources/main.d \
-./Sources/mcg_hal.d \
-./Sources/print_scan.d 
+./Sources/mcg_hal.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

@@ -22,7 +22,7 @@ Sources/fsl_debug_console.o: ../Sources/fsl_debug_console.c \
  C:\Freescale\KSDK_1.2.0\platform\hal\inc/fsl_mcg_hal_modes.h \
  C:\Freescale\KSDK_1.2.0\platform\hal\inc/fsl_mcg_hal.h \
  C:\Freescale\KSDK_1.2.0\platform\hal\inc/fsl_osc_hal.h \
- ../Sources/print_scan.h
+ C:\Freescale\KSDK_1.2.0/platform/utilities/src/print_scan.h
 
 ../SDK/platform/devices/fsl_device_registers.h:
 
@@ -70,4 +70,4 @@ C:\Freescale\KSDK_1.2.0\platform\hal\inc/fsl_mcg_hal.h:
 
 C:\Freescale\KSDK_1.2.0\platform\hal\inc/fsl_osc_hal.h:
 
-../Sources/print_scan.h:
+C:\Freescale\KSDK_1.2.0/platform/utilities/src/print_scan.h:

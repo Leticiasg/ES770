@@ -80,4 +80,6 @@ uint16_t adc_read2(void);
 
 void adc_initConvertion2(uint16_t ch);
 
+int adc_normalizeReadValue10(int iVal, int iMax);
+
 #endif /* UTIL_ADC_H_ */
