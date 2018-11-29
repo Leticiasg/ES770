@@ -2,9 +2,9 @@
 /* File name:        pid.h                                           */
 /* File description: Header file containing the function/methods     */
 /*                   prototypes of pid.c                             */
-/* Author name:      fcpinheiro,lopfrigerio                          */
-/* Creation date:    21jun2018                                       */
-/* Revision date:    21jun2018                                       */
+/* Author name:      fcpinheiro,lsgoncalves                          */
+/* Creation date:    nov2018                                         */
+/* Revision date:    nov2018                                         */
 /* ***************************************************************** */
 #ifndef SOURCES_UTIL_PID_H_
 #define SOURCES_UTIL_PID_H_
