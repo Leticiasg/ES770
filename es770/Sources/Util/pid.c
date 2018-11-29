@@ -2,9 +2,9 @@
 /* File name:        pid.c                                           */
 /* File description: This file has a couple of useful functions to   */
 /*                   operate a PID controller                        */
-/* Author name:      fcpinheiro,lopfrigerio                          */
-/* Creation date:    21jun2018                                       */
-/* Revision date:    21jun2018                                       */
+/* Author name:      fcpinheiro,lsgoncalves                          */
+/* Creation date:    nov2018                                         */
+/* Revision date:    nov2018                                         */
 /* ***************************************************************** */
 
 #include "pid.h"
@@ -29,7 +29,7 @@ void pid_PidInitialize(PID_DATA* pdtPidData)
 /* Method description: Generate controlling signal        */
 /* Input params:       pdtPidData = PID controller struct */
 /*                     dSensorValue = sensor read value   */
-/*					   dReferenceValue = reference value  */
+/*		       dReferenceValue = reference value  */
 /* Output params:      n/a                                */
 /* ****************************************************** */
 double pid_PidUpdate(PID_DATA* pdtPidData, double dSensorValue, double dReferenceValue)
