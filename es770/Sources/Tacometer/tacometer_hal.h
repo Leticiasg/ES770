@@ -2,9 +2,9 @@
 /* File name:        tacometer_hal.h                                 */
 /* File description: Header file containing the function/methods     */
 /*                   prototypes of tacometer_hal.c                   */
-/* Author name:      fcpinheiro,lopfrigerio                          */
-/* Creation date:    16may2018                                       */
-/* Revision date:    23may2018                                       */
+/* Author name:      fcpinheiro,lsgoncalves                          */
+/* Creation date:    nov2018                                         */
+/* Revision date:    nov2018                                         */
 /* ***************************************************************** */
 
 #ifndef SOURCES_UTIL_TACOMETER_HAL_H_
