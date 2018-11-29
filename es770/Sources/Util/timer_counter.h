@@ -16,42 +16,7 @@
 /* Input params:	   n/a 			                  */
 /* Outpu params:	   n/a 		                      */
 /* ************************************************** */
-void timer_initTPM1AsPWM(void);
-
-/* ************************************************ */
-/* Method name:        timer_coolerfan_init         */
-/* Method description: Initialize the cooler device */
-/*                     as PWM controlled            */
-/* Input params:       n/a                          */
-/* Output params:      n/a                          */
-/* ************************************************ */
-//void timer_coolerfan_init(void);
-
-/* ************************************************ */
-/* Method name:        timer_initHeater             */
-/* Method description: Initialize the heater device */
-/* Input params:       n/a                          */
-/* Output params:      n/a                          */
-/* ************************************************ */
-//void timer_initHeater(void);
-
-/* ************************************************** */
-/* Method name:        timer_setFanDutyCycle          */
-/* Method description: Set the cooler device to       */
-/*                     desired duty cycle             */
-/* Input params:       cDutyCycle = duty cycle (in %) */
-/* Output params:      n/a                            */
-/* ************************************************** */
-//void timer_setFanDutyCycle(char cDutyCycle);
-
-/* ************************************************ */
-/* Method name:        timer_changeHeaterPwm        */
-/* Method description: change the cooler pwm        */
-/* Input params:       pwm desired (percentage)     */
-/* Output params:      n/a                          */
-/* ************************************************ */
-//void timer_changeHeaterPwm(int iPwm);
-
+void timer_initTPM1AsPWM(int iPwm1,int iPwm2);
 void timer_initMotor(void);
 void timer_changeMotor1Pwm(int iPwm);
 void timer_changeMotor2Pwm(int iPwm);

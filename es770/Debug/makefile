@@ -9,9 +9,6 @@ RM := rm -rf
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include Sources/Util/subdir.mk
--include Sources/Tacometer/subdir.mk
--include Sources/Serial/subdir.mk
--include Sources/LedSwi/subdir.mk
 -include Sources/Encoder/subdir.mk
 -include Sources/subdir.mk
 -include Project_Settings/Startup_Code/subdir.mk
@@ -56,7 +53,7 @@ all: es770.elf secondary-outputs
 es770.elf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Cross ARM C++ Linker'
-	arm-none-eabi-g++ -mcpu=cortex-m0plus -mthumb -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -T "MKL25Z128xxx4_flash.ld" -Xlinker --gc-sections -L"C:/Users/aluno/Desktop/es770/ES770/es770/Project_Settings/Linker_Files" -Wl,-Map,"es770.map" -specs=nosys.specs -specs=nano.specs -o "es770.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-g++ -mcpu=cortex-m0plus -mthumb -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -T "MKL25Z128xxx4_flash.ld" -Xlinker --gc-sections -L"C:/Users/fecop/workspace2.kds/es770/Project_Settings/Linker_Files" -Wl,-Map,"es770.map" -specs=nosys.specs -specs=nano.specs -o "es770.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

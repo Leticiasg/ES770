@@ -165,7 +165,7 @@ uint16_t adc_read(uint16_t ch)
 void adc_initConvertion2(uint16_t ch)
 {
 	int tab = iTabelaAdc[ch];
-	ADC0_SC1A &= (ADC_SC1_ADCH(tab) |
+	ADC0_SC1A = (ADC_SC1_ADCH(tab) |
 			   ADC_SC1_DIFF(ADC_SC1_DIFF_SINGLEENDED) |
 			   ADC_SC1_AIEN(ADC_SC1_AIEN_DISABLE));
 }
@@ -202,5 +202,18 @@ int adc_convertAdc2Temp(int iAdc)
 	int iTemp;
 	iTemp = tabela_temp[iAdc];
 	return iTemp;
+}
+
+int adc_normalizeReadValue10(int iVal, int iMax)
+{
+	int i;
+	for(i = 9; i>=0; i--)
+	{
+		if(iVal > i*iMax/10)
+		{
+			return i;
+		}
+	}
+	return 10;
 }
 
