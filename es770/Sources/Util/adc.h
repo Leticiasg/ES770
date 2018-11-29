@@ -2,9 +2,9 @@
 /* File name:        adc.h                                           */
 /* File description: Header file containing the function/methods     */
 /*                   prototypes of adc.c                             */
-/* Author name:      fcpinheiro,lopfrigerio                          */
-/* Creation date:    07jun2018                                       */
-/* Revision date:    20jun2018                                       */
+/* Author name:      fcpinheiro,lsgoncalves                          */
+/* Creation date:    nov2018                                         */
+/* Revision date:    nov2018                                         */
 /* ***************************************************************** */
 
 
