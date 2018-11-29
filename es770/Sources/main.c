@@ -1,6 +1,6 @@
 /* ***************************************************************** */
 /* File name:        main.c                                          */
-/* File description: File dedicated to the ES670 prototype projects  */
+/* File description: File dedicated to the ES770 prototype projects  */
 /*                   involving the FRDM-KL25Z board together with is */
 /*                   daughter board containing more peripherals      */
 /*                                                                   */
@@ -10,9 +10,9 @@
 /*                   16 KB SRAM                                      */
 /*                   Voltage range: 1.71 to 3.6 V                    */
 /*                                                                   */
-/* Author name:      fcpinheiro,lopfrigerio                          */
-/* Creation date:    02may2018                                       */
-/* Revision date:    20jun2018                                       */
+/* Author name:      fcpinheiro,lsgoncalves                          */
+/* Creation date:    nov2018                                         */
+/* Revision date:    nov2018                                         */
 /* ***************************************************************** */
 
 /* system includes */
@@ -31,7 +31,7 @@
 
 #define PORT_PCR_MUX_CLR_MASK	!(PORT_PCR_MUX_MASK)
 #define BLACK_VALUE 			5					// valor normalizado do sensor abaixo do qual se considera como leitura do fundo preto
-#define MOTOR1_STRAIGHT 		30  				// PWM de reta do motor esquerdo
+#define MOTOR1_STRAIGHT 		30  					// PWM de reta do motor esquerdo
 #define MOTOR2_STRAIGHT 		60 					// PWM de reta do motor direito
 #define SENSOR_MAX 				0xd3				// maior valor dos sensores da pre-calibracao
 #define NUMBER_OF_CROSSINGS		2					// numero de cruzamentos da linha de chegada a contar
