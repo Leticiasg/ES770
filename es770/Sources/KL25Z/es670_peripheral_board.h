@@ -4,7 +4,7 @@
 /*                     of the peripheral board for the ES670 hardware*/
 /* Author name:      dloubach                                        */
 /* Creation date:    16out2015                                       */
-/* Revision date:    20jun2018 by fcpinheiro,lopfrigerio             */
+/* Revision date:    nov2018 by fcpinheiro,lsgoncalves               */
 /* ***************************************************************** */
 
 #ifndef SOURCES_ES670_PERIPHERAL_BOARD_H_
@@ -33,28 +33,6 @@
 
 /*                 END OF General uC definitions         */
 
-///*                 Fan definitions              */
-//
-//#define FAN_PORT_BASE_PNT           PORTA
-//#define FAN_GPIO_BASE_PNT           PTA
-//
-//#define FAN_PIN                     13U
-//#define FAN_GPIO_ALT                ALT1
-//#define FAN_PWM_ALT                 ALT3
-//#define FAN_DIR                     (GPIO_OUTPUT << FAN_PIN)
-//
-///*                 END OF Fan definitions              */
-//
-///*                 Heater definitions                  */
-//
-//#define HEATER_PORT_BASE_PNT           PORTA
-//#define HEATER_GPIO_BASE_PNT           PTA
-//
-//#define HEATER_PIN                     12U
-//#define HEATER_PWM_ALT                 ALT3
-//#define HEATER_DIR                     (GPIO_OUTPUT << HEATER_PIN)
-
-/*                 END OF Heater definitions            */
 
 /*                 Motor definitions              */
 
@@ -70,14 +48,6 @@
 #define MOTOR2_DIR                     (GPIO_OUTPUT << MOTOR2_PIN)
 
 /*                 END OF Motor definitions            */
-
-/*                 Temperature sensor definitions       */
-#define TEMPSENSOR_PORT_BASE_PNT       PORTE
-
-#define TEMPSENSOR_PIN                 21U
-#define VOLTSENSOR_PIN                 20U
-#define TEMPSENSOR_ADC_ALT             ALT0
-#define VOLTSENSOR_ADC_ALT             ALT0
 
 /* ADC Definitions */
 #define ADC_CFG1_ADICLK_BUS		       0u
