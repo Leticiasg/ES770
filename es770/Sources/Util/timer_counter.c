@@ -3,9 +3,9 @@
 /* File description: This file has a couple of useful functions to   */
 /*                   control peripheral cooler fan speed using PWM   */
 /* Author name:      dloubach                                        */
-/* Revisor names:    fcpinheiro,lopfrigerio                          */
+/* Revisor names:    fcpinheiro,lsgoncalves                          */
 /* Creation date:    09jan2015                                       */
-/* Revision date:    20jun2018                                       */
+/* Revision date:    nov2018                                         */
 /* ***************************************************************** */
 
 #include "KL25Z/es670_peripheral_board.h"
