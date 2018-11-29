@@ -3,9 +3,9 @@
 /* File description: This file has a couple of useful functions to   */
 /*                   operate ADC and convert read value to           */
 /*                   temperature                                     */
-/* Author name:      fcpinheiro,lopfrigerio                          */
-/* Creation date:    07jun2018                                       */
-/* Revision date:    20jun2018                                       */
+/* Author name:      fcpinheiro,lsgoncalves                          */
+/* Creation date:    nov2018                                         */
+/* Revision date:    nov2018                                         */
 /* ***************************************************************** */
 
 #include "KL25Z/es670_peripheral_board.h"
@@ -91,7 +91,7 @@ void adc_init(uint8_t res)
 	// Configure ADC
 	ADC0_CFG1 = 0; // Reset register
 
-	ADC0_CFG1 |= (ADC_CFG1_MODE(res) | // resoluÁ„o da convers„o
+	ADC0_CFG1 |= (ADC_CFG1_MODE(res) | // resolu√ß√£o da convers√£o
 	            ADC_CFG1_ADICLK(0) | // Input Bus Clock
 	            ADC_CFG1_ADIV(1));	 // Clock divide by 2
 
