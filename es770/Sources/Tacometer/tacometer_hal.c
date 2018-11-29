@@ -2,9 +2,9 @@
 /* File name:        tacometer_hal.c                                 */
 /* File description: This file implements functions to initiate and  */
 /*                   get cooler fan speed using tacometer peripheral */
-/* Author name:      fcpinheiro,lopfrigerio                          */
-/* Creation date:    16may2018                                       */
-/* Revision date:    23may2018                                       */
+/* Author name:      fcpinheiro,lsgoncalves                          */
+/* Creation date:    nov2018                                         */
+/* Revision date:    nov2018                                         */
 /* ***************************************************************** */
 
 #include "tacometer_hal.h"
