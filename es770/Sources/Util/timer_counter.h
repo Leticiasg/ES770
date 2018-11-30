@@ -2,19 +2,19 @@
 /* File name:        timer_counter.h                                 */
 /* File description: Header file containing the function/methods     */
 /*                   prototypes of timer_counter.c                   */
-/* Author name:      fcpinheiro,lopfrigerio                          */
-/* Creation date:    23jun2018                                       */
-/* Revision date:    20jun2018                                       */
+/* Author name:      fcpinheiro,lsgoncalves                          */
+/* Creation date:    nov2018                                         */
+/* Revision date:    nov2018                                         */
 /* ***************************************************************** */
 
 #ifndef UTIL_TIMER_COUNTER_H
 #define UTIL_TIMER_COUNTER_H
 
 /* ************************************************** */
-/* Method name: 	   timer_initTPM1AsPWM            */
+/* Method name: 	   timer_initTPM1AsPWM              */
 /* Method description: configure Timer1 to act as PWM */
-/* Input params:	   n/a 			                  */
-/* Outpu params:	   n/a 		                      */
+/* Input params:	   n/a 			                        */
+/* Outpu params:	   n/a 		                          */
 /* ************************************************** */
 void timer_initTPM1AsPWM(int iPwm1,int iPwm2);
 void timer_initMotor(void);
